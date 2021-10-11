@@ -15,7 +15,7 @@ public abstract class Actor implements Drawable {
 
     public void move(int dx, int dy) {
         Cell nextCell = cell.getNeighbor(dx, dy);
-        if(nextCell.getType() != CellType.WALL && !(nextCell.getActor() instanceof Skeleton)){
+        if(nextCell.getType() != CellType.WALL && !(nextCell.getActor() instanceof Monster)){
             cell.setActor(null);
             nextCell.setActor(this);
             cell = nextCell;
