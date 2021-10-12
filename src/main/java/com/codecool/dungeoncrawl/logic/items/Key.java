@@ -3,6 +3,8 @@ import com.codecool.dungeoncrawl.logic.Cell;
 
 public class Key extends Item{
 
+    public Key(){super();}
+
     public Key(Cell cell){
         super(cell);
     }

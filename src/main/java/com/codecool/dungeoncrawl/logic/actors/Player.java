@@ -18,12 +18,18 @@ public class Player extends Actor {
     public Player(Cell cell) {
         super(cell);
         setAttack(5);
+        inventory.add(new Key());
     }
 
     public void move(int dx, int dy) {
         Cell nextCell = getCell().getNeighbor(dx, dy);
         if(checkIfCanMove(nextCell)){
             getCell().setActor(null);
+            nextCell.setActor(this);
+            setCell(nextCell);
+        }else if(nextCell.getType() == CellType.CLOSED_DOOR && hasKey()){
+            getCell().setActor(null);
+            nextCell.setType(CellType.OPEN_DOOR);
             nextCell.setActor(this);
             setCell(nextCell);
         }
@@ -43,6 +49,10 @@ public class Player extends Actor {
                 && type != CellType.CLOSED_DOOR
                 && type != CellType.EMPTY
                 && !(nextCell.getActor() instanceof Monster);
+    }
+
+    private boolean hasKey(){
+        return this.inventory.stream().anyMatch(x -> x instanceof Key);
     }
 
     public void attack(Cell nextCell){
