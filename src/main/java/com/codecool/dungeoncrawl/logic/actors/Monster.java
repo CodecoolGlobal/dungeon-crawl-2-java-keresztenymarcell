@@ -13,7 +13,5 @@ abstract public class Monster extends Actor{
     }
 
     @Override
-    public void move(int dx, int dy) {
-
-    }
+    public abstract void move(int dx, int dy);
 }

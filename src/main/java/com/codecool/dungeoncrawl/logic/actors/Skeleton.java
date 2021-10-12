@@ -11,7 +11,12 @@ public class Skeleton extends Monster {
 
     @Override
     public void move(int dx, int dy) {
-
+        Cell nextCell = getCell().getNeighbor(dx, dy);
+        if(checkIfCanMove(nextCell)){
+            getCell().setActor(null);
+            nextCell.setActor(this);
+            setCell(nextCell);
+        }
     }
 
     @Override

@@ -18,6 +18,7 @@ public class Player extends Actor {
     public Player(Cell cell) {
         super(cell);
         setAttack(5);
+        setHealth(50);
         inventory.add(new Key());
     }
 
@@ -41,14 +42,6 @@ public class Player extends Actor {
             addItemToInventory(nextCell.getItem());
             cell = nextCell;
         }
-    }
-
-    private boolean checkIfCanMove(Cell nextCell){
-        CellType type = nextCell.getType();
-        return type != CellType.WALL
-                && type != CellType.CLOSED_DOOR
-                && type != CellType.EMPTY
-                && !(nextCell.getActor() instanceof Monster);
     }
 
     private boolean hasKey(){

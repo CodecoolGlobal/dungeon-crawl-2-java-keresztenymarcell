@@ -64,6 +64,7 @@ public class Main extends Application {
         switch (keyEvent.getCode()) {
             case UP:
                 map.getPlayer().move(0, -1);
+                map.moveMonsters();
                 refresh();
                 break;
             case DOWN:

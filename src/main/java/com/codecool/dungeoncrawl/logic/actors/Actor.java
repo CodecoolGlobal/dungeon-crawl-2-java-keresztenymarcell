@@ -1,6 +1,7 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.Drawable;
 
 public abstract class Actor implements Drawable {
@@ -16,6 +17,14 @@ public abstract class Actor implements Drawable {
     public abstract void move(int dx, int dy);
 
     abstract public void attack(Cell cell);
+
+    protected boolean checkIfCanMove(Cell nextCell){
+        CellType type = nextCell.getType();
+        return type != CellType.WALL
+                && type != CellType.CLOSED_DOOR
+                && type != CellType.EMPTY
+                && !(nextCell.getActor() instanceof Monster);
+    }
 
     public void setHealth(int health) {
         this.health = health;
