@@ -22,7 +22,7 @@ public class Player extends Actor {
 
     public void move(int dx, int dy) {
         Cell nextCell = getCell().getNeighbor(dx, dy);
-        if(nextCell.getType() != CellType.WALL && nextCell.getActor() == null){
+        if(checkIfCanMove(nextCell)){
             getCell().setActor(null);
             nextCell.setActor(this);
             setCell(nextCell);
@@ -35,6 +35,14 @@ public class Player extends Actor {
             addItemToInventory(nextCell.getItem());
             cell = nextCell;
         }
+    }
+
+    private boolean checkIfCanMove(Cell nextCell){
+        CellType type = nextCell.getType();
+        return type != CellType.WALL
+                && type != CellType.CLOSED_DOOR
+                && type != CellType.EMPTY
+                && !(nextCell.getActor() instanceof Monster);
     }
 
     public void attack(Cell nextCell){
