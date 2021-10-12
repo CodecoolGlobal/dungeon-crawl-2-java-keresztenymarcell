@@ -1,7 +1,7 @@
 package com.codecool.dungeoncrawl.logic.items;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.Drawable;
-import com.codecool.dungeoncrawl.logic.actors.Actor;
+
 
 public abstract class Item implements Drawable {
     private Cell cell;
