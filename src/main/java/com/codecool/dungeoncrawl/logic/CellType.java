@@ -8,7 +8,8 @@ public enum CellType {
     GRASS("grass"),
     BUSH("bush"),
     LATTER("latter"),
-    HOUSE("house");
+    HOUSE("house"),
+    CLOSED_DOOR("closedDoor");
 
 
     private final String tileName;
