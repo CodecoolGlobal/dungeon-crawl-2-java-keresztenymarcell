@@ -38,6 +38,24 @@ public class MapLoader {
                         case 'd':
                             cell.setType(CellType.CLOSED_DOOR);
                             break;
+                        case 'T':
+                            cell.setType(CellType.TREE);
+                            break;
+                        case ',':
+                            cell.setType(CellType.GRASS);
+                            break;
+                        case 'b':
+                            cell.setType(CellType.BUSH);
+                            break;
+                        case 'L':
+                            cell.setType(CellType.LATTER);
+                            break;
+                        case 'H':
+                            cell.setType(CellType.HOUSE);
+                            break;
+                        case 'D':
+                            cell.setType(CellType.CLOSED_DOOR);
+                            break;
                         case 's':
                             cell.setType(CellType.FLOOR);
                             new Skeleton(cell);
