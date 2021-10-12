@@ -9,6 +9,8 @@ public class Skeleton extends Monster {
         setHealth(8);
     }
 
+
+
     @Override
     public String getTileName() {
         return "skeleton";
