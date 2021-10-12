@@ -34,17 +34,15 @@ public class Main extends Application {
         GridPane ui = new GridPane();
         ui.setPrefWidth(200);
         ui.setPadding(new Insets(10));
+        ui.setVgap(map.getHeight() * Tiles.TILE_WIDTH-70);
 
         ui.add(new Label("Health: "), 0, 0);
         ui.add(healthLabel, 1, 0);
 
-        ui.setAlignment(Pos.TOP_LEFT);
-
 
         Button button = new Button("Pick up");
         button.setDisable(true);
-        button.setAlignment(Pos.TOP_LEFT);
-        ui.add(button, 1, 1);
+        ui.add(button, 0, 1);
 
         BorderPane borderPane = new BorderPane();
 
