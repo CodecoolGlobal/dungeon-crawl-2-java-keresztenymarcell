@@ -40,7 +40,7 @@ public class Main extends Application {
         ui.add(new Label("Health: "), 0, 0);
         ui.add(healthLabel, 1, 0);
 
-//        ui.setAlignment(Pos.TOP_LEFT);
+        ui.setAlignment(Pos.TOP_LEFT);
 
 
         Button button = new Button("Pick up");
