@@ -36,7 +36,9 @@ public class Player extends Actor {
     }
 
     public void removeItemFromInventory(Item item) {
-        inventory.add(item);
+        if (item != null) {
+            inventory.remove(item);
+        }
     }
 
     public List<Item> getInventory() {
