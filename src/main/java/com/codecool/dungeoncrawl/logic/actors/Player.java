@@ -4,7 +4,6 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.items.Weapon;
 import com.codecool.dungeoncrawl.logic.items.Item;
-import com.codecool.dungeoncrawl.logic.items.Key;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -20,6 +19,7 @@ public class Player extends Actor {
         setAttack(5);
     }
 
+    @Override
     public void move(int dx, int dy) {
         Cell nextCell = getCell().getNeighbor(dx, dy);
         if(nextCell.getType() != CellType.WALL && nextCell.getActor() == null){
@@ -29,11 +29,6 @@ public class Player extends Actor {
         }
         else if(nextCell.getActor() instanceof Monster){
             attack(nextCell);
-        } else if (nextCell.getItem() != null && nextCell.getItem() instanceof Key) {
-            cell.setActor(null);
-            nextCell.setActor(this);
-            addItemToInventory(nextCell.getItem());
-            cell = nextCell;
         }
     }
 
@@ -70,5 +65,12 @@ public class Player extends Actor {
 
     public String getTileName() {
         return "player";
+    }
+
+    public void pickUpItem() {
+        Item item = this.cell.getItem();
+        addItemToInventory(item);
+        this.cell.setItem(null);
+        System.out.println(inventory);
     }
 }
