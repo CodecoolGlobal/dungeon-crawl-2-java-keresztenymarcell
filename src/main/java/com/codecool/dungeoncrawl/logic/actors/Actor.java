@@ -3,20 +3,21 @@ package com.codecool.dungeoncrawl.logic.actors;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.Drawable;
+import com.codecool.dungeoncrawl.logic.items.Key;
 
 public abstract class Actor implements Drawable {
-    private Cell cell;
-    private int health = 10;
-    private int attack;
+    protected Cell cell;
+    protected int health = 10;
+    protected int attack;
 
     public Actor(Cell cell) {
         this.cell = cell;
         this.cell.setActor(this);
     }
 
-    abstract public void attack(Cell cell);
+    public abstract void move(int dx, int dy);
 
-    abstract public void move(int dx, int dy);
+    abstract public void attack(Cell cell);
 
     public void setHealth(int health) {
         this.health = health;

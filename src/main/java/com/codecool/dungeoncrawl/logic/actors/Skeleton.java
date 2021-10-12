@@ -12,6 +12,11 @@ public class Skeleton extends Monster {
 
 
     @Override
+    public void move(int dx, int dy) {
+
+    }
+
+    @Override
     public String getTileName() {
         return "skeleton";
     }
