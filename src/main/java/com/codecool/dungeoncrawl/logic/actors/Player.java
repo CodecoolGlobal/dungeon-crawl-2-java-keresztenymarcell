@@ -19,7 +19,6 @@ public class Player extends Actor {
         super(cell);
         setAttack(5);
         setHealth(50);
-        inventory.add(new Key());
     }
 
     public void move(int dx, int dy) {
