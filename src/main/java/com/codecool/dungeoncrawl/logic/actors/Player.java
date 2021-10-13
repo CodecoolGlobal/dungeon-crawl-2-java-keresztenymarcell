@@ -81,6 +81,6 @@ public class Player extends Actor {
         Item item = this.cell.getItem();
         addItemToInventory(item);
         this.cell.setItem(null);
-        System.out.println(inventory);
+//        System.out.println(inventory);
     }
 }
