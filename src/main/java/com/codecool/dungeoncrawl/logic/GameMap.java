@@ -4,6 +4,7 @@ import com.codecool.dungeoncrawl.logic.actors.Actor;
 import com.codecool.dungeoncrawl.logic.actors.Monster;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 
+
 public class GameMap {
     private int width;
     private int height;
@@ -52,4 +53,5 @@ public class GameMap {
     public int getHeight() {
         return height;
     }
+
 }
