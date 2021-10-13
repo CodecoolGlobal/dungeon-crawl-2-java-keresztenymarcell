@@ -2,6 +2,7 @@ package com.codecool.dungeoncrawl.logic;
 
 import com.codecool.dungeoncrawl.logic.actors.Skull;
 import com.codecool.dungeoncrawl.logic.actors.Ufo;
+import com.codecool.dungeoncrawl.logic.items.Apple;
 import com.codecool.dungeoncrawl.logic.items.Key;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
@@ -44,6 +45,10 @@ public class MapLoader {
                             break;
                         case ',':
                             cell.setType(CellType.GRASS);
+                            break;
+                        case 'a':
+                            cell.setType(CellType.GRASS);
+                            new Apple(cell);
                             break;
                         case 'b':
                             cell.setType(CellType.BUSH);
