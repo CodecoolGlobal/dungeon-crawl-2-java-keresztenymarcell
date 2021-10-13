@@ -1,7 +1,9 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
+import com.codecool.dungeoncrawl.App;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
+import com.codecool.dungeoncrawl.logic.items.Key;
 import com.codecool.dungeoncrawl.logic.items.Weapon;
 import com.codecool.dungeoncrawl.logic.items.*;
 
@@ -13,6 +15,7 @@ public class Player extends Actor {
     private List<Item> inventory = new LinkedList<>();
 
     private Weapon weapon;
+
 
     public Player(Cell cell) {
         super(cell);
@@ -30,16 +33,28 @@ public class Player extends Actor {
         }else if(nextCell.getType() == CellType.CLOSED_DOOR && hasKey()){
             getCell().setActor(null);
             nextCell.setType(CellType.OPEN_DOOR);
+            removeKey();
             nextCell.setActor(this);
             setCell(nextCell);
         }
         else if(nextCell.getActor() instanceof Monster){
             attack(nextCell);
         }
+
     }
 
     private boolean hasKey(){
         return this.inventory.stream().anyMatch(x -> x instanceof Key);
+    }
+
+    private void removeKey(){
+        for(Item item: inventory){
+            if(item instanceof Key){
+                inventory.remove(item);
+                break;
+            }
+        }
+
     }
 
     public void attack(Cell nextCell){
@@ -79,7 +94,11 @@ public class Player extends Actor {
 
     public void pickUpItem() {
         Item item = this.cell.getItem();
-        addItemToInventory(item);
+        if(item instanceof Apple){
+            this.setHealth(getHealth() + ((Apple) item).getPlusHealth());
+        }else{
+            addItemToInventory(item);
+        }
         this.cell.setItem(null);
 //        System.out.println(inventory);
     }

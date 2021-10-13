@@ -2,6 +2,7 @@ package com.codecool.dungeoncrawl.logic;
 
 import com.codecool.dungeoncrawl.logic.actors.Skull;
 import com.codecool.dungeoncrawl.logic.actors.Ufo;
+import com.codecool.dungeoncrawl.logic.items.Apple;
 import com.codecool.dungeoncrawl.logic.items.Key;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
@@ -11,8 +12,8 @@ import java.io.InputStream;
 import java.util.Scanner;
 
 public class MapLoader {
-    public static GameMap loadMap() {
-        InputStream is = MapLoader.class.getResourceAsStream("/map.txt");
+    public static GameMap loadMap(String mapSource) {
+        InputStream is = MapLoader.class.getResourceAsStream(mapSource);
         Scanner scanner = new Scanner(is);
         int width = scanner.nextInt();
         int height = scanner.nextInt();
@@ -44,6 +45,10 @@ public class MapLoader {
                             break;
                         case ',':
                             cell.setType(CellType.GRASS);
+                            break;
+                        case 'a':
+                            cell.setType(CellType.GRASS);
+                            new Apple(cell);
                             break;
                         case 'b':
                             cell.setType(CellType.BUSH);
