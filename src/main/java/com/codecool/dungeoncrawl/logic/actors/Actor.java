@@ -24,8 +24,8 @@ public abstract class Actor implements Drawable {
         return type != CellType.WALL
                 && type != CellType.CLOSED_DOOR
                 && type != CellType.EMPTY
-                && type != CellType.TREE
-                && !(nextCell.getActor() instanceof Monster);
+                && nextCell.getActor() == null
+                && type != CellType.TREE;
     }
 
     public void setHealth(int health) {
