@@ -1,9 +1,6 @@
 package com.codecool.dungeoncrawl.logic;
 
-import com.codecool.dungeoncrawl.logic.actors.Actor;
-import com.codecool.dungeoncrawl.logic.actors.Monster;
-import com.codecool.dungeoncrawl.logic.actors.Player;
-import com.codecool.dungeoncrawl.logic.actors.Skeleton;
+import com.codecool.dungeoncrawl.logic.actors.*;
 import com.codecool.dungeoncrawl.logic.utilities.Randomizer;
 
 
@@ -37,6 +34,20 @@ public class GameMap {
                     int[] dir = Randomizer.chooseDirection();
                     if(!Monster.haveMoved.contains(monster)) {
                         monster.move(dir[0], dir[1]);
+                        Monster.haveMoved.add(monster);
+                    }
+                }else if(monster instanceof Ufo){
+                    int[] place;
+                    if(!Monster.haveMoved.contains(monster)){
+                        if(Randomizer.random.nextInt(8) < 5){
+                            System.out.println("step");
+                            place = Randomizer.chooseDirection();
+                            monster.move(place[0], place[1]);
+                        }
+                        else{
+                            System.out.println("jump");
+                            ((Ufo)monster).teleport(Randomizer.getRandomCell(cells));
+                        }
                         Monster.haveMoved.add(monster);
                     }
                 }
