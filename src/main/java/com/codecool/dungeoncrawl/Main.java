@@ -24,9 +24,6 @@ public class Main extends Application {
     int canvasWidth = 512;      // make it divisible by 32!
     int canvasHeight = 512;
     Canvas canvas = new Canvas(canvasWidth, canvasHeight);
-//    Canvas canvas = new Canvas(
-//            map.getWidth() * Tiles.TILE_WIDTH,
-//            map.getHeight() * Tiles.TILE_WIDTH);
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
 
@@ -91,7 +88,6 @@ public class Main extends Application {
 
     private void refresh() {
         context.setFill(Color.BLACK);
-//        canvas.setWidth();
         int[] contextStartPos = getFirstPos(map.getPlayer());
         context.fillRect(contextStartPos[0], contextStartPos[1], canvas.getWidth(), canvas.getHeight());
         for (int x = 0; x < canvasWidth / Tiles.TILE_WIDTH; x++) {
