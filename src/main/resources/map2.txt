@@ -1,9 +1,9 @@
 25 20
 TTTTTTTTTTTTTTTTTTTTTTTTT
-TT,,,,TTTT,,,b,T,,H,TTTTT
-T,,,,,,T,,,s,,,,T,,,,,TTT
-T,,b,,,,,,,,,,,,,T,,,,bTT
-TT,,,,,,,,,,T,,,,,TTTs,,T
+TT,,,,TTTT,,,b,TTTH,TTTTT
+T,,,,,,T,,,s,,,,TT,,,,TTT
+T,,b,,,,,,,,,,,,,D,,,,bTT
+TT,,,,,,,,,,T,,,,TTTTs,,T
 TTTT,,,,,,,TTT,,b,,,,,,TT
 TTT,,,,s,,,,TTT,,,,,,TTTT
 T,,,,,,,,,,,,TTTTTTTTTTTT
