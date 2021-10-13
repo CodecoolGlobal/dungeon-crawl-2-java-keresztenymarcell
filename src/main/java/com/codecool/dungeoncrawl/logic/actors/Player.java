@@ -30,6 +30,7 @@ public class Player extends Actor {
         }else if(nextCell.getType() == CellType.CLOSED_DOOR && hasKey()){
             getCell().setActor(null);
             nextCell.setType(CellType.OPEN_DOOR);
+            removeKey();
             nextCell.setActor(this);
             setCell(nextCell);
         }
@@ -40,6 +41,15 @@ public class Player extends Actor {
 
     private boolean hasKey(){
         return this.inventory.stream().anyMatch(x -> x instanceof Key);
+    }
+
+    private void removeKey(){
+        for(Item item: inventory){
+            if(item instanceof Key){
+                inventory.remove(item);
+                break;
+            }
+        }
     }
 
     public void attack(Cell nextCell){
