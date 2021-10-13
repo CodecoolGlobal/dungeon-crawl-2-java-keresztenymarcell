@@ -1,7 +1,11 @@
 package com.codecool.dungeoncrawl.logic.actors;
 import com.codecool.dungeoncrawl.logic.Cell;
 
+import java.util.ArrayList;
+import java.util.List;
+
 abstract public class Monster extends Actor{
+    public static List<Monster> haveMoved = new ArrayList<>();
 
     public Monster(Cell cell){
         super(cell);
@@ -14,4 +18,5 @@ abstract public class Monster extends Actor{
 
     @Override
     public abstract void move(int dx, int dy);
+
 }
