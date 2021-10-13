@@ -36,6 +36,7 @@ public class MapLoader {
                             cell.setType(CellType.FLOOR);
                             break;
                         case 'd':
+                        case 'D':
                             cell.setType(CellType.CLOSED_DOOR);
                             break;
                         case 'T':
@@ -52,9 +53,6 @@ public class MapLoader {
                             break;
                         case 'H':
                             cell.setType(CellType.HOUSE);
-                            break;
-                        case 'D':
-                            cell.setType(CellType.CLOSED_DOOR);
                             break;
                         case 's':
                             cell.setType(CellType.FLOOR);
