@@ -39,7 +39,7 @@ public class GameMap {
                 }else if(monster instanceof Wizard){
                     int[] place;
                     if(!Monster.hasMoved.contains(monster)){
-                        if(Randomizer.random.nextInt(8) < 5){
+                        if(Randomizer.random.nextInt(5) < 5){
                             place = Randomizer.chooseDirection();
                             monster.move(place[0], place[1]);
                         }

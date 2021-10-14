@@ -6,6 +6,7 @@ import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.items.Item;
+import com.codecool.dungeoncrawl.logic.items.Weapon;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -173,13 +174,14 @@ public class Main extends Application {
         List<Item> inventory = player.getInventory();
         int playerHealth = player.getHealth();
         int playerAttack = player.getAttack();
+        Weapon weapon = player.getWeapon();
         map = MapLoader.loadMap(mapName);
 
         player = map.getPlayer();
         player.setInventory(inventory);
         player.setHealth(playerHealth);
         player.setAttack(playerAttack);
-
+        player.setWeapon(weapon);
 
     }
 }
