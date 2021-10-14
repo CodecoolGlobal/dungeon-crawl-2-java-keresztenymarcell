@@ -5,6 +5,7 @@ import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Player;
+import com.codecool.dungeoncrawl.logic.items.Item;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -20,11 +21,14 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.util.List;
+import java.util.Map;
+
 public class Main extends Application {
 
-    GameMap map = MapLoader.loadMap("/map.txt");
-    int canvasWidth = 512;      // make it divisible by 32!
-    int canvasHeight = 512;
+    GameMap map = MapLoader.loadMap("/map2.txt");
+    int canvasWidth = 608;      // make it divisible by 32!
+    int canvasHeight = 608;
     Canvas canvas = new Canvas(canvasWidth, canvasHeight);
 
     GraphicsContext context = canvas.getGraphicsContext2D();
@@ -93,6 +97,12 @@ public class Main extends Application {
     }
 
     private void refresh() {
+        if (map.getPlayer().getCell().getType() == CellType.LATTER){
+            switchMap("/map2.txt");
+        }else if (map.getPlayer().getCell().getType() == CellType.HOUSE){
+            switchMap("/map3.txt");
+        }
+
         context.setFill(Color.BLACK);
         int[] contextStartPos = getFirstPos(map.getPlayer());
         context.fillRect(contextStartPos[0], contextStartPos[1], canvas.getWidth(), canvas.getHeight());
@@ -110,9 +120,9 @@ public class Main extends Application {
             }
         }
 
-        if (map.getPlayer().getCell().getType() == CellType.LATTER){
-            map = MapLoader.loadMap("/map2.txt");
-        }
+
+
+
 
         healthLabel.setText("" + map.getPlayer().getHealth());
     }
@@ -147,5 +157,21 @@ public class Main extends Application {
         }
 
         return new int[] {startX, startY};
+    }
+
+    private void switchMap(String mapName){
+
+        Player player = map.getPlayer();
+        List<Item> inventory = player.getInventory();
+        int playerHealth = player.getHealth();
+        int playerAttack = player.getAttack();
+        map = MapLoader.loadMap(mapName);
+
+        player = map.getPlayer();
+        player.setInventory(inventory);
+        player.setHealth(playerHealth);
+        player.setAttack(playerAttack);
+
+
     }
 }

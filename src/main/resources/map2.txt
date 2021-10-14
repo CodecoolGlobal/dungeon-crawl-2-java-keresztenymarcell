@@ -2,10 +2,10 @@
 TTTTTTTTTTTTTTTTTTTTTTTTT
 TT,a,,TTTT,,,b,TTTH,TTTTT
 T,,,,,,T,,,s,,,,TT,,,,TTT
-T,,b,,,,,,,,,,,,,D,,,,bTT
-TT,,,,,,,,,,T,,,,TTTTs,,T
-TTTT,,,,,,,TTT,,b,,,,,,TT
-TTT,,,,s,,,,TTT,,,,,,TTTT
+T,b,,,,,,,,,,,,SD,,,bTTT
+TT,,,,,,,,,,T,,,,TTTTT,,T
+TTTT,,,,,,,TTT,,b,,,,,,,T
+TTT,,,,s,,,,TTT,,,,b,TTkT
 T,,,,,,,,,,,,TTTTTTTTTTTT
 T,,,b,,,,,,,,,,,,,,,,,,,T
 T,,,,,,,,TTT,,,,,,T,,,bTT
@@ -17,5 +17,5 @@ TT,,,,,,,,,,T,,s,,,,TTTTT
 T,,,,,,,,,,,,,,,,,,,TTa,T
 T,,,,bT,,,,,,b,,,,,,s,,,T
 TTTTTT,,,,,,,,,,,,,,,TTTT
-TS@...,,,,,,b,,,TTTTTTTTT
+T.@...,,,,,,b,,,TTTTTTTTT
 TTTTTTTTTTTTTTTTTTTTTTTTT
