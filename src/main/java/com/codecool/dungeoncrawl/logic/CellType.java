@@ -10,7 +10,9 @@ public enum CellType {
     GRASS("grass"),
     BUSH("bush"),
     LATTER("latter"),
-    HOUSE("house");
+    HOUSE("house"),
+    INVENTORY("inventory");
+
 
 
 
