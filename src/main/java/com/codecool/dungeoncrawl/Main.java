@@ -6,6 +6,7 @@ import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.items.Apple;
+import com.codecool.dungeoncrawl.logic.items.HealthBar;
 import com.codecool.dungeoncrawl.logic.items.Item;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -23,6 +24,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Main extends Application {
@@ -30,8 +32,10 @@ public class Main extends Application {
     GameMap inventoryMap = MapLoader.loadMap("/inventory.txt");
     int canvasWidth = 16 * Tiles.TILE_WIDTH;
     int canvasHeight = 16 * Tiles.TILE_WIDTH;
+    int inventoryCanvasWidth = canvasWidth;
+    int inventoryCanvasHeight = Tiles.TILE_WIDTH * 2;
     Canvas canvas = new Canvas(canvasWidth, canvasHeight);
-    Canvas inventoryCanvas = new Canvas(canvasWidth, Tiles.TILE_WIDTH * 2);
+    Canvas inventoryCanvas = new Canvas(inventoryCanvasWidth, inventoryCanvasHeight);
     GraphicsContext context = canvas.getGraphicsContext2D();
     GraphicsContext inventoryContext = inventoryCanvas.getGraphicsContext2D();
     Label healthLabel = new Label();
@@ -117,16 +121,37 @@ public class Main extends Application {
         }
     }
 
-    private void refreshInventory() {
-        List<Item> inventory = map.getPlayer().getInventory();
-        int inventoryStartColIndex = 2;
-        for (Item item: inventory) {
+    private List<Item> convertPlayerHealthToHealthBars() {
+        int healthScore = map.getPlayer().getHealth() / 10;
+        List<Item> healthBars = new ArrayList<>();
+        for (int i=0; i<healthScore; i++) {
+            healthBars.add(new HealthBar());
+        }
+        return healthBars;
+    }
+
+    private boolean ifIndexWithinCanvasWidth(int indexToCheck, int canvasWidth) {
+        return indexToCheck < canvasWidth/Tiles.TILE_WIDTH;
+    }
+
+    private void setInventoryBarItems(List<Item> items, int whichRowIndex) {
+        int startColIndex = 2;
+        for (Item item: items) {
             if (item instanceof Apple) {
                 continue;
             }
-            inventoryMap.getCell(inventoryStartColIndex, 1).setItem(item);
-            inventoryStartColIndex++;
+            inventoryMap.getCell(startColIndex, whichRowIndex).setItem(item);
+            if (ifIndexWithinCanvasWidth(startColIndex, inventoryCanvasWidth)) {
+                startColIndex++;
+            }
         }
+    }
+
+    private void refreshInventory() {
+        List<Item> inventory = map.getPlayer().getInventory();
+        List<Item> healthBars = convertPlayerHealthToHealthBars();
+        setInventoryBarItems(healthBars, 0);
+        setInventoryBarItems(inventory, 1);
     }
 
     private void refresh() {
@@ -134,7 +159,7 @@ public class Main extends Application {
         refreshInventory();
 
         fillCanvas(map, canvas, context, contextStartPos[0], contextStartPos[1], canvasWidth, canvasHeight);
-        fillCanvas(inventoryMap, inventoryCanvas, inventoryContext, 0, 0, canvasWidth, Tiles.TILE_WIDTH * 2);
+        fillCanvas(inventoryMap, inventoryCanvas, inventoryContext, 0, 0, inventoryCanvasWidth, inventoryCanvasHeight);
 
 
         if (map.getPlayer().getCell().getType() == CellType.LATTER){
