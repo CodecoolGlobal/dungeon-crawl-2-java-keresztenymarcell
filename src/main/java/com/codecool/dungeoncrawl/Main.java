@@ -7,7 +7,6 @@ import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.items.Apple;
 import com.codecool.dungeoncrawl.logic.items.Item;
-import com.codecool.dungeoncrawl.logic.items.Key;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -19,6 +18,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -60,9 +60,10 @@ public class Main extends Application {
         ui.add(button, 0, 1);
 
         BorderPane borderPane = new BorderPane();
+        FlowPane canvases = new FlowPane() ;
+        canvases.getChildren().addAll(canvas, inventoryCanvas);
 
-        borderPane.setCenter(canvas);
-        borderPane.setBottom(inventoryCanvas);
+        borderPane.setCenter(canvases);
 
         borderPane.setRight(ui);
 
@@ -121,7 +122,7 @@ public class Main extends Application {
         int inventoryStartColIndex = 2;
         for (Item item: inventory) {
             if (item instanceof Apple) {
-                inventoryMap.getCell(inventoryStartColIndex, 0).setItem(item);
+                continue;
             }
             inventoryMap.getCell(inventoryStartColIndex, 1).setItem(item);
             inventoryStartColIndex++;
