@@ -86,6 +86,8 @@ public class MapLoader {
                         case '0':
                             cell.setType(CellType.INVENTORY);
                             break;
+                        case '+':
+                            cell.setType(CellType.HEALTH);
                         default:
                             throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");
                     }
