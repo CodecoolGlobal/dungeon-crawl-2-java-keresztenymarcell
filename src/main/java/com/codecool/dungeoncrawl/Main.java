@@ -7,6 +7,10 @@ import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.items.Item;
 import com.codecool.dungeoncrawl.logic.items.Weapon;
+import com.codecool.dungeoncrawl.logic.actors.Player;
+import com.codecool.dungeoncrawl.logic.items.Apple;
+import com.codecool.dungeoncrawl.logic.items.HealthBar;
+import com.codecool.dungeoncrawl.logic.items.Item;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -14,10 +18,10 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -25,16 +29,20 @@ import javafx.stage.Stage;
 import java.util.List;
 import java.util.Map;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main extends Application {
-
     GameMap map = MapLoader.loadMap("/map.txt");
-    int canvasWidth = 512;      // make it divisible by 32!
-    int canvasHeight = 512;
+    GameMap inventoryMap = MapLoader.loadMap("/inventory.txt");
+    int canvasWidth = 16 * Tiles.TILE_WIDTH;
+    int canvasHeight = 16 * Tiles.TILE_WIDTH;
+    int inventoryCanvasWidth = canvasWidth;
+    int inventoryCanvasHeight = Tiles.TILE_WIDTH * 2;
     Canvas canvas = new Canvas(canvasWidth, canvasHeight);
-
+    Canvas inventoryCanvas = new Canvas(inventoryCanvasWidth, inventoryCanvasHeight);
     GraphicsContext context = canvas.getGraphicsContext2D();
-    Label healthLabel = new Label();
-    Label inventory = new Label();
+    GraphicsContext inventoryContext = inventoryCanvas.getGraphicsContext2D();
 
     public static void main(String[] args) {
         launch(args);
@@ -45,26 +53,22 @@ public class Main extends Application {
         GridPane ui = new GridPane();
         ui.setPrefWidth(500);
         ui.setPadding(new Insets(10));
-        ui.setVgap(map.getHeight() * Tiles.TILE_WIDTH-70);
-
-        ui.add(new Label("Health: "), 0, 0);
-        Label inventoryLabel = new Label("Inventory: ");
-        ui.add(healthLabel, 1, 0);
-        ui.add(new Label("-".repeat(10)), 2, 0);
-        ui.add(inventoryLabel, 1, 1);
-        ui.add(inventory, 2, 1);
 
         Button button = new Button("Pick up");
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 map.getPlayer().pickUpItem();
+                refresh();
             }
         });
         ui.add(button, 0, 1);
 
         BorderPane borderPane = new BorderPane();
+        FlowPane canvases = new FlowPane() ;
+        canvases.getChildren().addAll(canvas, inventoryCanvas);
 
-        borderPane.setCenter(canvas);
+        borderPane.setCenter(canvases);
+
         borderPane.setRight(ui);
 
         Scene scene = new Scene(borderPane);
@@ -104,6 +108,57 @@ public class Main extends Application {
         }
     }
 
+    private void fillCanvas(GameMap mapToSet, Canvas canvasToSet, GraphicsContext contextToSet, int contextStartX, int contextStartY, int width, int height) {
+        contextToSet.setFill(Color.BLACK);
+        contextToSet.fillRect(contextStartX, contextStartY, canvasToSet.getWidth(), canvasToSet.getHeight());
+        for (int x = 0; x < width / Tiles.TILE_WIDTH; x++) {
+            for (int y = 0; y < height / Tiles.TILE_WIDTH; y++) {
+                Cell cell = mapToSet.getCell(x+contextStartX, y+contextStartY);
+                if (cell.getActor() != null) {
+                    Tiles.drawTile(contextToSet, cell.getActor(), x, y);
+                }else if (cell.getItem() != null){
+                    Tiles.drawTile(contextToSet, cell.getItem(), x, y);
+                }
+                else {
+                    Tiles.drawTile(contextToSet, cell, x, y);
+                }
+            }
+        }
+    }
+
+    private List<Item> convertPlayerHealthToHealthBars() {
+        int healthScore = map.getPlayer().getHealth() / 10;
+        List<Item> healthBars = new ArrayList<>();
+        for (int i=0; i<healthScore; i++) {
+            healthBars.add(new HealthBar());
+        }
+        return healthBars;
+    }
+
+    private boolean ifIndexWithinCanvasWidth(int indexToCheck, int canvasWidth) {
+        return indexToCheck < canvasWidth/Tiles.TILE_WIDTH;
+    }
+
+    private void setInventoryBarItems(List<Item> items, int whichRowIndex) {
+        int startColIndex = 2;
+        for (Item item: items) {
+            if (item instanceof Apple) {
+                continue;
+            }
+            inventoryMap.getCell(startColIndex, whichRowIndex).setItem(item);
+            if (ifIndexWithinCanvasWidth(startColIndex, inventoryCanvasWidth)) {
+                startColIndex++;
+            }
+        }
+    }
+
+    private void refreshInventory() {
+        List<Item> inventory = map.getPlayer().getInventory();
+        List<Item> healthBars = convertPlayerHealthToHealthBars();
+        setInventoryBarItems(healthBars, 0);
+        setInventoryBarItems(inventory, 1);
+    }
+
     private void refresh() {
         if (map.getPlayer().getCell().getType() == CellType.LATTER){
             switchMap("/map2.txt");
@@ -111,32 +166,20 @@ public class Main extends Application {
             switchMap("/map3.txt");
         }
 
-        context.setFill(Color.BLACK);
         int[] contextStartPos = getFirstPos(map.getPlayer());
-        context.fillRect(contextStartPos[0], contextStartPos[1], canvas.getWidth(), canvas.getHeight());
-        for (int x = 0; x < canvasWidth / Tiles.TILE_WIDTH; x++) {
-            for (int y = 0; y < canvasHeight / Tiles.TILE_WIDTH; y++) {
-                Cell cell = map.getCell(x+contextStartPos[0], y+contextStartPos[1]);
-                if (cell.getActor() != null) {
-                    Tiles.drawTile(context, cell.getActor(), x, y);
-                }else if (cell.getItem() != null){
-                    Tiles.drawTile(context, cell.getItem(), x, y);
-                }
-                else {
-                    Tiles.drawTile(context, cell, x, y);
-                }
-            }
-        }
+        refreshInventory();
+
+        fillCanvas(map, canvas, context, contextStartPos[0], contextStartPos[1], canvasWidth, canvasHeight);
+        fillCanvas(inventoryMap, inventoryCanvas, inventoryContext, 0, 0, inventoryCanvasWidth, inventoryCanvasHeight);
+
 
         if (map.getPlayer().getCell().getType() == CellType.LATTER){
             map = MapLoader.loadMap("/map2.txt");
         }
 
-        healthLabel.setText("" + map.getPlayer().getHealth());
-        inventory.setText(map.getPlayer().inventoryToText());
     }
 
-    public int[] getFirstPos(Player player) {
+    private int[] getFirstPos(Player player) {
         int playerPosX = player.getX();
         int playerPosY = player.getY();
 
@@ -167,6 +210,7 @@ public class Main extends Application {
 
         return new int[] {startX, startY};
     }
+
 
     private void switchMap(String mapName){
 

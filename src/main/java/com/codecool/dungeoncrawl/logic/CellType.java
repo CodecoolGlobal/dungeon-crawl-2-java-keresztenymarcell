@@ -11,7 +11,11 @@ public enum CellType {
     BUSH("bush"),
     LATTER("latter"),
     HOUSE("house"),
-    PRIZE("prize");
+    PRIZE("prize"),
+    INVENTORY("inventory"),
+    HEALTH("health"),
+    HEALTHBAR("healthBar");
+
 
 
     private final String tileName;
