@@ -42,7 +42,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         GridPane ui = new GridPane();
-        ui.setPrefWidth(200);
+        ui.setPrefWidth(500);
         ui.setPadding(new Insets(10));
         ui.setVgap(map.getHeight() * Tiles.TILE_WIDTH-70);
 
@@ -77,27 +77,29 @@ public class Main extends Application {
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
-        switch (keyEvent.getCode()) {
-            case UP:
-                map.getPlayer().move(0, -1);
-                map.moveMonsters();
-                refresh();
-                break;
-            case DOWN:
-                map.getPlayer().move(0, 1);
-                map.moveMonsters();
-                refresh();
-                break;
-            case LEFT:
-                map.getPlayer().move(-1, 0);
-                map.moveMonsters();
-                refresh();
-                break;
-            case RIGHT:
-                map.getPlayer().move(1,0);
-                map.moveMonsters();
-                refresh();
-                break;
+        if(map.getPlayer().isAlive()) {
+            switch (keyEvent.getCode()) {
+                case UP:
+                    map.getPlayer().move(0, -1);
+                    map.moveMonsters();
+                    refresh();
+                    break;
+                case DOWN:
+                    map.getPlayer().move(0, 1);
+                    map.moveMonsters();
+                    refresh();
+                    break;
+                case LEFT:
+                    map.getPlayer().move(-1, 0);
+                    map.moveMonsters();
+                    refresh();
+                    break;
+                case RIGHT:
+                    map.getPlayer().move(1, 0);
+                    map.moveMonsters();
+                    refresh();
+                    break;
+            }
         }
     }
 

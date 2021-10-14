@@ -40,13 +40,11 @@ public class GameMap {
                     int[] place;
                     if(!Monster.hasMoved.contains(monster)){
                         if(Randomizer.random.nextInt(8) < 5){
-                            System.out.println("step");
                             place = Randomizer.chooseDirection();
                             monster.move(place[0], place[1]);
                         }
                         else{
-                            System.out.println("jump");
-                            ((Ufo)monster).teleport(Randomizer.getRandomCell(cells));
+                            ((Wizard)monster).teleport(Randomizer.getRandomCell(cells));
                         }
                         Monster.hasMoved.add(monster);
                     }
