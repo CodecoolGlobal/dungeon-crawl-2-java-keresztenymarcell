@@ -1,6 +1,7 @@
 package com.codecool.dungeoncrawl;
 
 import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Player;
@@ -20,10 +21,12 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+
     GameMap map = MapLoader.loadMap();
     int canvasWidth = 512;      // make it divisible by 32!
     int canvasHeight = 512;
     Canvas canvas = new Canvas(canvasWidth, canvasHeight);
+
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
 
@@ -73,14 +76,17 @@ public class Main extends Application {
                 break;
             case DOWN:
                 map.getPlayer().move(0, 1);
+                map.moveMonsters();
                 refresh();
                 break;
             case LEFT:
                 map.getPlayer().move(-1, 0);
+                map.moveMonsters();
                 refresh();
                 break;
             case RIGHT:
                 map.getPlayer().move(1,0);
+                map.moveMonsters();
                 refresh();
                 break;
         }
@@ -103,6 +109,11 @@ public class Main extends Application {
                 }
             }
         }
+
+        if (map.getPlayer().getCell().getType() == CellType.LATTER){
+            map = MapLoader.loadMap("/map2.txt");
+        }
+
         healthLabel.setText("" + map.getPlayer().getHealth());
     }
 

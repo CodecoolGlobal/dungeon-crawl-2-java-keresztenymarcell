@@ -13,6 +13,7 @@ public enum CellType {
     HOUSE("house");
 
 
+
     private final String tileName;
 
     CellType(String tileName) {
