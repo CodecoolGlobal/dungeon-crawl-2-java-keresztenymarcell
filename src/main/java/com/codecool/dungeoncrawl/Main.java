@@ -5,6 +5,9 @@ import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Player;
+import com.codecool.dungeoncrawl.logic.items.Apple;
+import com.codecool.dungeoncrawl.logic.items.Item;
+import com.codecool.dungeoncrawl.logic.items.Key;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -19,6 +22,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+
+import java.util.List;
 
 public class Main extends Application {
     GameMap map = MapLoader.loadMap("/map.txt");
@@ -57,6 +62,8 @@ public class Main extends Application {
         BorderPane borderPane = new BorderPane();
 
         borderPane.setCenter(canvas);
+        borderPane.setBottom(inventoryCanvas);
+
         borderPane.setRight(ui);
 
         Scene scene = new Scene(borderPane);
@@ -109,8 +116,21 @@ public class Main extends Application {
         }
     }
 
+    private void refreshInventory() {
+        List<Item> inventory = map.getPlayer().getInventory();
+        int inventoryStartColIndex = 2;
+        for (Item item: inventory) {
+            if (item instanceof Apple) {
+                inventoryMap.getCell(inventoryStartColIndex, 0).setItem(item);
+            }
+            inventoryMap.getCell(inventoryStartColIndex, 1).setItem(item);
+            inventoryStartColIndex++;
+        }
+    }
+
     private void refresh() {
         int[] contextStartPos = getFirstPos(map.getPlayer());
+        refreshInventory();
 
         fillCanvas(map, canvas, context, contextStartPos[0], contextStartPos[1], canvasWidth, canvasHeight);
         fillCanvas(inventoryMap, inventoryCanvas, inventoryContext, 0, 0, canvasWidth, Tiles.TILE_WIDTH * 2);
