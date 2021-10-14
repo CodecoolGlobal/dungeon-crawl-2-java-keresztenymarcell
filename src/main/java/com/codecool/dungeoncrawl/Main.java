@@ -5,10 +5,7 @@ import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Player;
-import com.codecool.dungeoncrawl.logic.items.Item;
-import com.codecool.dungeoncrawl.logic.items.Weapon;
-import com.codecool.dungeoncrawl.logic.items.Apple;
-import com.codecool.dungeoncrawl.logic.items.HealthBar;
+import com.codecool.dungeoncrawl.logic.items.*;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -24,6 +21,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.util.HashSet;
 import java.util.List;
 
 import java.util.ArrayList;
@@ -138,10 +136,17 @@ public class Main extends Application {
 
     private void setInventoryBarItems(List<Item> items, int whichRowIndex) {
         int startColIndex = 2;
+        boolean isAlreadyTypeSword = false;
         for (Item item: items) {
-            inventoryMap.getCell(startColIndex, whichRowIndex).setItem(item);
-            if (ifIndexWithinCanvasWidth(startColIndex, inventoryCanvasWidth)) {
-                startColIndex++;
+            if (item != null) {
+                if (item instanceof Sword) {
+                    if (isAlreadyTypeSword) continue;
+                    else isAlreadyTypeSword = true;
+                }
+                inventoryMap.getCell(startColIndex, whichRowIndex).setItem(item);
+                if (ifIndexWithinCanvasWidth(startColIndex, inventoryCanvasWidth)) {
+                    startColIndex++;
+                }
             }
         }
     }
