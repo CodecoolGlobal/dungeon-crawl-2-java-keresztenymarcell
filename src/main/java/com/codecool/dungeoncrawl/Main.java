@@ -123,7 +123,8 @@ public class Main extends Application {
     }
 
     private List<Item> convertPlayerHealthToHealthBars() {
-        int healthScore = map.getPlayer().getHealth() / 5;
+        int divisorofHealthScore = 10;
+        int healthScore = map.getPlayer().getHealth() / divisorofHealthScore;
         List<Item> healthBars = new ArrayList<>();
         for (int i=0; i<healthScore; i++) {
             healthBars.add(new HealthBar());
