@@ -12,7 +12,8 @@ public enum CellType {
     LATTER("latter"),
     HOUSE("house"),
     INVENTORY("inventory"),
-    HEALTH("health");
+    HEALTH("health"),
+    HEALTHBAR("healthBar");
 
 
 
