@@ -26,13 +26,14 @@ import java.util.Map;
 
 public class Main extends Application {
 
-    GameMap map = MapLoader.loadMap("/map2.txt");
-    int canvasWidth = 608;      // make it divisible by 32!
-    int canvasHeight = 608;
+    GameMap map = MapLoader.loadMap("/map.txt");
+    int canvasWidth = 512;      // make it divisible by 32!
+    int canvasHeight = 512;
     Canvas canvas = new Canvas(canvasWidth, canvasHeight);
 
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
+    Label inventory = new Label();
 
     public static void main(String[] args) {
         launch(args);
@@ -41,12 +42,16 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         GridPane ui = new GridPane();
-        ui.setPrefWidth(200);
+        ui.setPrefWidth(500);
         ui.setPadding(new Insets(10));
         ui.setVgap(map.getHeight() * Tiles.TILE_WIDTH-70);
 
         ui.add(new Label("Health: "), 0, 0);
+        Label inventoryLabel = new Label("Inventory: ");
         ui.add(healthLabel, 1, 0);
+        ui.add(new Label("-".repeat(10)), 2, 0);
+        ui.add(inventoryLabel, 1, 1);
+        ui.add(inventory, 2, 1);
 
         Button button = new Button("Pick up");
         button.setOnAction(new EventHandler<ActionEvent>() {
@@ -72,27 +77,29 @@ public class Main extends Application {
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
-        switch (keyEvent.getCode()) {
-            case UP:
-                map.getPlayer().move(0, -1);
-                map.moveMonsters();
-                refresh();
-                break;
-            case DOWN:
-                map.getPlayer().move(0, 1);
-                map.moveMonsters();
-                refresh();
-                break;
-            case LEFT:
-                map.getPlayer().move(-1, 0);
-                map.moveMonsters();
-                refresh();
-                break;
-            case RIGHT:
-                map.getPlayer().move(1,0);
-                map.moveMonsters();
-                refresh();
-                break;
+        if(map.getPlayer().isAlive()) {
+            switch (keyEvent.getCode()) {
+                case UP:
+                    map.getPlayer().move(0, -1);
+                    map.moveMonsters();
+                    refresh();
+                    break;
+                case DOWN:
+                    map.getPlayer().move(0, 1);
+                    map.moveMonsters();
+                    refresh();
+                    break;
+                case LEFT:
+                    map.getPlayer().move(-1, 0);
+                    map.moveMonsters();
+                    refresh();
+                    break;
+                case RIGHT:
+                    map.getPlayer().move(1, 0);
+                    map.moveMonsters();
+                    refresh();
+                    break;
+            }
         }
     }
 
@@ -119,7 +126,13 @@ public class Main extends Application {
                 }
             }
         }
+
+        if (map.getPlayer().getCell().getType() == CellType.LATTER){
+            map = MapLoader.loadMap("/map2.txt");
+        }
+
         healthLabel.setText("" + map.getPlayer().getHealth());
+        inventory.setText(map.getPlayer().inventoryToText());
     }
 
     public int[] getFirstPos(Player player) {

@@ -6,6 +6,11 @@ import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.items.Key;
 import com.codecool.dungeoncrawl.logic.items.Weapon;
 import com.codecool.dungeoncrawl.logic.items.*;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -20,7 +25,7 @@ public class Player extends Actor {
     public Player(Cell cell) {
         super(cell);
         setAttack(5);
-        setHealth(50);
+        setHealth(1);
     }
 
     @Override
@@ -38,8 +43,25 @@ public class Player extends Actor {
             setCell(nextCell);
         }
         else if(nextCell.getActor() instanceof Monster){
+            System.out.println("fight");
             attack(nextCell);
+            if(!isAlive()){
+                showGameOverMessage();
+
+            }
         }
+
+    }
+
+    public void showGameOverMessage(){
+
+        Dialog<String > losingMessage = new Dialog<>();
+        losingMessage.setTitle("Message");
+        losingMessage.setContentText("Game Over");
+        losingMessage.show();
+        losingMessage.getDialogPane().getButtonTypes().addAll(ButtonType.CLOSE);
+        losingMessage.setHeight(260);
+        losingMessage.setWidth(260);
 
     }
 
@@ -101,7 +123,15 @@ public class Player extends Actor {
         }
         this.cell.setItem(null);
 
-        System.out.println(inventory);
+    }
 
+    public boolean isAlive(){
+        return health > 0;
+    }
+
+    public String inventoryToText(){
+        StringBuilder ret = new StringBuilder();
+        inventory.forEach(i -> ret.append(i.getTileName()).append(" "));
+        return ret.toString();
     }
 }

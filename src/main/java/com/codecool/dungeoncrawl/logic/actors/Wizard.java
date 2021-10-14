@@ -22,9 +22,7 @@ public class Wizard extends Monster {
     }
 
     public void teleport(Cell nextCell){
-        System.out.println("tele");
 //        if(checkIfCanMove(nextCell)){
-            System.out.println("can");
             getCell().setActor(null);
             nextCell.setActor(this);
             setCell(nextCell);
