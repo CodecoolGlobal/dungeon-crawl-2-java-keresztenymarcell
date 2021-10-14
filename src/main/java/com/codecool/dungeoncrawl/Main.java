@@ -139,9 +139,6 @@ public class Main extends Application {
     private void setInventoryBarItems(List<Item> items, int whichRowIndex) {
         int startColIndex = 2;
         for (Item item: items) {
-            if (item instanceof Apple) {
-                continue;
-            }
             inventoryMap.getCell(startColIndex, whichRowIndex).setItem(item);
             if (ifIndexWithinCanvasWidth(startColIndex, inventoryCanvasWidth)) {
                 startColIndex++;
