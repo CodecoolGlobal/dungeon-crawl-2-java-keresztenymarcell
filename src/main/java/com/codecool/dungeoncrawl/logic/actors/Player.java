@@ -132,16 +132,6 @@ public class Player extends Actor {
         return health > 0;
     }
 
-    public String inventoryToText(){
-        StringBuilder ret = new StringBuilder();
-        if(inventory.size() > 0){
-            inventory.forEach(i -> {
-                ret.append(i.getTileName()).append(" ");
-            });
-        };
-        return ret.toString();
-    }
-
     public void setWeapon(Weapon weapon){
         this.weapon = weapon;
     }
