@@ -165,7 +165,7 @@ public class Main extends Application {
             switchMap("/map3.txt");
         }
 
-        int[] contextStartPos = getFirstPos(map.getPlayer());
+        int[] contextStartPos = getCanvasStartPos(map.getPlayer());
         refreshInventory();
 
         fillCanvas(map, canvas, context, contextStartPos[0], contextStartPos[1], canvasWidth, canvasHeight);
@@ -178,34 +178,22 @@ public class Main extends Application {
 
     }
 
-    private int[] getFirstPos(Player player) {
+    private int[] getCanvasStartPos(Player player) {
         int playerPosX = player.getX();
         int playerPosY = player.getY();
-
         int mapHeight = map.getHeight();
         int mapWidth = map.getWidth();
-
         int yPointer = canvasHeight / Tiles.TILE_WIDTH / 2;
         int xPointer = canvasWidth / Tiles.TILE_WIDTH / 2;
-
         int startX = playerPosX - xPointer;
         int startY = playerPosY - yPointer;
-
         int endX = playerPosX + xPointer;
         int endY = playerPosY + yPointer;
 
-        if (startX < 0) {
-            startX = 0;
-        }
-        if (startY < 0) {
-            startY = 0;
-        }
-        if (endY >= mapHeight) {
-            startY = mapHeight - canvasHeight / Tiles.TILE_WIDTH;
-        }
-        if (endX >= mapWidth) {
-            startX = mapWidth - canvasWidth / Tiles.TILE_WIDTH;
-        }
+        if (startX < 0) startX = 0;
+        if (startY < 0) startY = 0;
+        if (endY >= mapHeight) startY = mapHeight - canvasHeight / Tiles.TILE_WIDTH;
+        if (endX >= mapWidth) startX = mapWidth - canvasWidth / Tiles.TILE_WIDTH;
 
         return new int[] {startX, startY};
     }
