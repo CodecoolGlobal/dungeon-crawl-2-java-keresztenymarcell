@@ -50,14 +50,6 @@ public class Main extends Application {
         ui.add(inventoryLabel, 1, 1);
         ui.add(inventory, 2, 1);
 
-//        ui.add(new Label("000000"), 0, 0);
-//        ui.add(new Label("111111"), 1, 0);
-//        ui.add(new Label("222222"), 2, 0);
-//
-//        ui.add(new Label("000000"), 0, 1);
-//        ui.add(new Label("111111"), 1, 1);
-//        ui.add(new Label("222222"), 2, 1);
-//
         Button button = new Button("Pick up");
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
