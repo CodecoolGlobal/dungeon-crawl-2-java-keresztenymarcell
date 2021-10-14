@@ -1,8 +1,10 @@
 package com.codecool.dungeoncrawl;
 
 import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
+import com.codecool.dungeoncrawl.logic.actors.Player;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -19,11 +21,14 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-    GameMap map = MapLoader.loadMap();
-    int canvasWidth = 512;      // make it divisible by 32!
-    int canvasHeight = 512;
+    GameMap map = MapLoader.loadMap("/map.txt");
+    GameMap inventoryMap = MapLoader.loadMap("/inventory.txt");
+    int canvasWidth = 16 * Tiles.TILE_WIDTH;
+    int canvasHeight = 16 * Tiles.TILE_WIDTH;
     Canvas canvas = new Canvas(canvasWidth, canvasHeight);
+    Canvas inventoryCanvas = new Canvas(canvasWidth, Tiles.TILE_WIDTH * 2);
     GraphicsContext context = canvas.getGraphicsContext2D();
+    GraphicsContext inventoryContext = inventoryCanvas.getGraphicsContext2D();
     Label healthLabel = new Label();
 
     public static void main(String[] args) {
@@ -44,6 +49,7 @@ public class Main extends Application {
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 map.getPlayer().pickUpItem();
+                refresh();
             }
         });
         ui.add(button, 0, 1);
@@ -85,29 +91,84 @@ public class Main extends Application {
         }
     }
 
-    private void refresh() {
-        context.setFill(Color.BLACK);
-        int[] contextStartPos = getFirstPos(map.getPlayer());
-        context.fillRect(contextStartPos[0], contextStartPos[1], canvas.getWidth(), canvas.getHeight());
-        for (int x = 0; x < canvasWidth / Tiles.TILE_WIDTH; x++) {
-            for (int y = 0; y < canvasHeight / Tiles.TILE_WIDTH; y++) {
-                Cell cell = map.getCell(x+contextStartPos[0], y+contextStartPos[1]);
+    private void fillCanvas(GameMap mapToSet, Canvas canvasToSet, GraphicsContext contextToSet, int contextStartX, int contextStartY, int width, int height) {
+        contextToSet.setFill(Color.BLACK);
+        contextToSet.fillRect(contextStartX, contextStartY, canvasToSet.getWidth(), canvasToSet.getHeight());
+        for (int x = 0; x < width / Tiles.TILE_WIDTH; x++) {
+            for (int y = 0; y < height / Tiles.TILE_WIDTH; y++) {
+                Cell cell = mapToSet.getCell(x+contextStartX, y+contextStartY);
                 if (cell.getActor() != null) {
-                    Tiles.drawTile(context, cell.getActor(), x, y);
+                    Tiles.drawTile(contextToSet, cell.getActor(), x, y);
                 }else if (cell.getItem() != null){
-                    Tiles.drawTile(context, cell.getItem(), x, y);
+                    Tiles.drawTile(contextToSet, cell.getItem(), x, y);
                 }
                 else {
-                    Tiles.drawTile(context, cell, x, y);
+                    Tiles.drawTile(contextToSet, cell, x, y);
                 }
             }
         }
+    }
+
+    private void refresh() {
+        int[] contextStartPos = getFirstPos(map.getPlayer());
+
+        fillCanvas(map, canvas, context, contextStartPos[0], contextStartPos[1], canvasWidth, canvasHeight);
+        fillCanvas(inventoryMap, inventoryCanvas, inventoryContext, 0, 0, canvasWidth, Tiles.TILE_WIDTH * 2);
+
+//        context.setFill(Color.BLACK);
+//
+//        context.fillRect(contextStartPos[0], contextStartPos[1], canvas.getWidth(), canvas.getHeight());
+//        for (int x = 0; x < canvasWidth / Tiles.TILE_WIDTH; x++) {
+//            for (int y = 0; y < canvasHeight / Tiles.TILE_WIDTH; y++) {
+//                Cell cell = map.getCell(x+contextStartPos[0], y+contextStartPos[1]);
+//                if (cell.getActor() != null) {
+//                    Tiles.drawTile(context, cell.getActor(), x, y);
+//                }else if (cell.getItem() != null){
+//                    Tiles.drawTile(context, cell.getItem(), x, y);
+//                }
+//                else {
+//                    Tiles.drawTile(context, cell, x, y);
+//                }
+//            }
+//        }
 
         if (map.getPlayer().getCell().getType() == CellType.LATTER){
             map = MapLoader.loadMap("/map2.txt");
         }
 
         healthLabel.setText("" + map.getPlayer().getHealth());
+    }
+
+    private int[] getFirstPos(Player player) {
+        int playerPosX = player.getX();
+        int playerPosY = player.getY();
+
+        int mapHeight = map.getHeight();
+        int mapWidth = map.getWidth();
+
+        int yPointer = canvasHeight / Tiles.TILE_WIDTH / 2;
+        int xPointer = canvasWidth / Tiles.TILE_WIDTH / 2;
+
+        int startX = playerPosX - xPointer;
+        int startY = playerPosY - yPointer;
+
+        int endX = playerPosX + xPointer;
+        int endY = playerPosY + yPointer;
+
+        if (startX < 0) {
+            startX = 0;
+        }
+        if (startY < 0) {
+            startY = 0;
+        }
+        if (endY >= mapHeight) {
+            startY = mapHeight - canvasHeight / Tiles.TILE_WIDTH;
+        }
+        if (endX >= mapWidth) {
+            startX = mapWidth - canvasWidth / Tiles.TILE_WIDTH;
+        }
+
+        return new int[] {startX, startY};
     }
 
 }
