@@ -22,7 +22,7 @@ public class Player extends Actor {
     public Player(Cell cell) {
         super(cell);
         setAttack(5);
-        setHealth(1000);
+        setHealth(10);
     }
 
     @Override
@@ -43,11 +43,8 @@ public class Player extends Actor {
             setCell(nextCell);
         }
         else if(nextCell.getActor() instanceof Monster){
+            System.out.println("hello");
             attack(nextCell);
-            if(!isAlive()){
-                showGameOverMessage("Game Over");
-
-            }
         }
 
     }

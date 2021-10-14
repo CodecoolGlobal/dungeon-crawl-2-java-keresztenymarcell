@@ -37,14 +37,13 @@ public class GameMap {
                 }
                 else monster = null;
                 if(monster instanceof Skeleton){
-                    monster.hitHero(this);
                     int[] dir = Randomizer.chooseDirection();
                     if(!Monster.hasMoved.contains(monster)) {
                         monster.move(dir[0], dir[1]);
                         Monster.hasMoved.add(monster);
                     }
-                }else if(monster instanceof Wizard){
                     monster.hitHero(this);
+                }else if(monster instanceof Wizard){
                     int[] place;
                     if(!Monster.hasMoved.contains(monster)){
                         if(Randomizer.random.nextInt(5) < 5){
@@ -56,8 +55,12 @@ public class GameMap {
                         }
                         Monster.hasMoved.add(monster);
                     }
+                    monster.hitHero(this);
                 }
             }
+        }
+        if(!getPlayer().isAlive()){
+            getPlayer().showGameOverMessage("Game Over");
         }
         Monster.hasMoved.clear();
     }
