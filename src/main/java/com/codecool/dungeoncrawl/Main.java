@@ -4,6 +4,7 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
+import com.codecool.dungeoncrawl.logic.actors.Player;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -20,10 +21,12 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-    GameMap map = MapLoader.loadMap("/map.txt");
-    Canvas canvas = new Canvas(
-            map.getWidth() * Tiles.TILE_WIDTH,
-            map.getHeight() * Tiles.TILE_WIDTH);
+
+    GameMap map = MapLoader.loadMap();
+    int canvasWidth = 512;      // make it divisible by 32!
+    int canvasHeight = 512;
+    Canvas canvas = new Canvas(canvasWidth, canvasHeight);
+
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
 
@@ -64,10 +67,6 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-    private void handlePickUpButtonClick(ActionEvent event) {
-
-    }
-
     private void onKeyPressed(KeyEvent keyEvent) {
         switch (keyEvent.getCode()) {
             case UP:
@@ -95,10 +94,11 @@ public class Main extends Application {
 
     private void refresh() {
         context.setFill(Color.BLACK);
-        context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        for (int x = 0; x < map.getWidth(); x++) {
-            for (int y = 0; y < map.getHeight(); y++) {
-                Cell cell = map.getCell(x, y);
+        int[] contextStartPos = getFirstPos(map.getPlayer());
+        context.fillRect(contextStartPos[0], contextStartPos[1], canvas.getWidth(), canvas.getHeight());
+        for (int x = 0; x < canvasWidth / Tiles.TILE_WIDTH; x++) {
+            for (int y = 0; y < canvasHeight / Tiles.TILE_WIDTH; y++) {
+                Cell cell = map.getCell(x+contextStartPos[0], y+contextStartPos[1]);
                 if (cell.getActor() != null) {
                     Tiles.drawTile(context, cell.getActor(), x, y);
                 }else if (cell.getItem() != null){
@@ -117,4 +117,35 @@ public class Main extends Application {
         healthLabel.setText("" + map.getPlayer().getHealth());
     }
 
+    public int[] getFirstPos(Player player) {
+        int playerPosX = player.getX();
+        int playerPosY = player.getY();
+
+        int mapHeight = map.getHeight();
+        int mapWidth = map.getWidth();
+
+        int yPointer = canvasHeight / Tiles.TILE_WIDTH / 2;
+        int xPointer = canvasWidth / Tiles.TILE_WIDTH / 2;
+
+        int startX = playerPosX - xPointer;
+        int startY = playerPosY - yPointer;
+
+        int endX = playerPosX + xPointer;
+        int endY = playerPosY + yPointer;
+
+        if (startX < 0) {
+            startX = 0;
+        }
+        if (startY < 0) {
+            startY = 0;
+        }
+        if (endY >= mapHeight) {
+            startY = mapHeight - canvasHeight / Tiles.TILE_WIDTH;
+        }
+        if (endX >= mapWidth) {
+            startX = mapWidth - canvasWidth / Tiles.TILE_WIDTH;
+        }
+
+        return new int[] {startX, startY};
+    }
 }
