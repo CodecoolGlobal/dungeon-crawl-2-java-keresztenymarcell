@@ -149,6 +149,7 @@ public class Main extends Application {
     }
 
     private void refreshInventory() {
+        inventoryMap = MapLoader.loadMap("/inventory.txt");
         List<Item> inventory = map.getPlayer().getInventory();
         List<Item> healthBars = convertPlayerHealthToHealthBars();
         setInventoryBarItems(healthBars, 0);
