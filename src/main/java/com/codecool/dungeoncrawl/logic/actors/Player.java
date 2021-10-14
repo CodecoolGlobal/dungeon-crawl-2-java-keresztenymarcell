@@ -21,7 +21,7 @@ public class Player extends Actor {
     public Player(Cell cell) {
         super(cell);
         setAttack(5);
-        setHealth(1000);
+        setHealth(100);
     }
 
     @Override
