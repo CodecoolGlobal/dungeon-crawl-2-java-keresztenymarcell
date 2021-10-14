@@ -121,8 +121,8 @@ public class Main extends Application {
     }
 
     private List<Item> convertPlayerHealthToHealthBars() {
-        int divisorofHealthScore = 10;
-        int healthScore = map.getPlayer().getHealth() / divisorofHealthScore;
+        int divisorOfHealthScore = 10;
+        int healthScore = map.getPlayer().getHealth() / divisorOfHealthScore;
         List<Item> healthBars = new ArrayList<>();
         for (int i=0; i<healthScore; i++) {
             healthBars.add(new HealthBar());
