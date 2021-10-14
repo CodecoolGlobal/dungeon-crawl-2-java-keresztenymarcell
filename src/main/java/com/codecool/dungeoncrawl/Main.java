@@ -119,11 +119,6 @@ public class Main extends Application {
                 }
             }
         }
-
-
-
-
-
         healthLabel.setText("" + map.getPlayer().getHealth());
     }
 
