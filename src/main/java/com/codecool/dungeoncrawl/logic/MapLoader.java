@@ -47,7 +47,7 @@ public class MapLoader {
                             cell.setType(CellType.GRASS);
                             break;
                         case 'a':
-                            cell.setType(CellType.GRASS);
+                            cell.setType(CellType.FLOOR);
                             new Apple(cell);
                             break;
                         case 'b':
@@ -82,6 +82,9 @@ public class MapLoader {
                         case '@':
                             cell.setType(CellType.FLOOR);
                             map.setPlayer(new Player(cell));
+                            break;
+                        case 'P':
+                            cell.setType(CellType.PRIZE);
                             break;
                         default:
                             throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");
