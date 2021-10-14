@@ -3,6 +3,9 @@ package com.codecool.dungeoncrawl.logic;
 import com.codecool.dungeoncrawl.logic.actors.*;
 import com.codecool.dungeoncrawl.logic.utilities.Randomizer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class GameMap {
     private int width;
@@ -31,12 +34,14 @@ public class GameMap {
                 }
                 else monster = null;
                 if(monster instanceof Skeleton){
+                    monster.hitHero(this);
                     int[] dir = Randomizer.chooseDirection();
                     if(!Monster.hasMoved.contains(monster)) {
                         monster.move(dir[0], dir[1]);
                         Monster.hasMoved.add(monster);
                     }
                 }else if(monster instanceof Wizard){
+                    monster.hitHero(this);
                     int[] place;
                     if(!Monster.hasMoved.contains(monster)){
                         if(Randomizer.random.nextInt(5) < 5){
@@ -74,4 +79,7 @@ public class GameMap {
         return height;
     }
 
+    public Cell[][] getCells() {
+        return cells;
+    }
 }
