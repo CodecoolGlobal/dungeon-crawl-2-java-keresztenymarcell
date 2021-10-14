@@ -38,7 +38,6 @@ public class Main extends Application {
     Canvas inventoryCanvas = new Canvas(inventoryCanvasWidth, inventoryCanvasHeight);
     GraphicsContext context = canvas.getGraphicsContext2D();
     GraphicsContext inventoryContext = inventoryCanvas.getGraphicsContext2D();
-    Label healthLabel = new Label();
 
     public static void main(String[] args) {
         launch(args);
@@ -50,9 +49,6 @@ public class Main extends Application {
         ui.setPrefWidth(200);
         ui.setPadding(new Insets(10));
         ui.setVgap(map.getHeight() * Tiles.TILE_WIDTH-70);
-
-        ui.add(new Label("Health: "), 0, 0);
-        ui.add(healthLabel, 1, 0);
 
         Button button = new Button("Pick up");
         button.setOnAction(new EventHandler<ActionEvent>() {
@@ -166,7 +162,6 @@ public class Main extends Application {
             map = MapLoader.loadMap("/map2.txt");
         }
 
-        healthLabel.setText("" + map.getPlayer().getHealth());
     }
 
     private int[] getFirstPos(Player player) {
