@@ -87,8 +87,6 @@ public class Player extends Actor {
         int actualAttack = this.getAttack();
         if(weapon != null)
             actualAttack += weapon.getAttack();
-        System.out.println(actualAttack);
-        System.out.println(weapon.getClass());
         Actor enemy = nextCell.getActor();
         enemy.setHealth(enemy.getHealth() - actualAttack);
         if(enemy.getHealth() <= 0)

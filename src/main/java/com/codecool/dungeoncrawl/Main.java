@@ -78,7 +78,7 @@ public class Main extends Application {
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
-        if(map.getPlayer().isAlive()) {
+        if(map.getPlayer().isAlive() && !map.getPlayer().hasWon(map.getPlayer().getCell())) {
             switch (keyEvent.getCode()) {
                 case UP:
                     map.getPlayer().move(0, -1);
