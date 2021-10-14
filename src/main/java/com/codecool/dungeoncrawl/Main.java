@@ -48,7 +48,6 @@ public class Main extends Application {
         GridPane ui = new GridPane();
         ui.setPrefWidth(200);
         ui.setPadding(new Insets(10));
-        ui.setVgap(map.getHeight() * Tiles.TILE_WIDTH-70);
 
         Button button = new Button("Pick up");
         button.setOnAction(new EventHandler<ActionEvent>() {
