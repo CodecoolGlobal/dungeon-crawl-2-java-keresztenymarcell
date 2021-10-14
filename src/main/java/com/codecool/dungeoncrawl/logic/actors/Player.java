@@ -8,7 +8,6 @@ import com.codecool.dungeoncrawl.logic.items.Weapon;
 import com.codecool.dungeoncrawl.logic.items.*;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
-import org.w3c.dom.ls.LSOutput;
 
 import java.util.LinkedList;
 import java.util.List;

@@ -7,10 +7,8 @@ import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.items.Item;
 import com.codecool.dungeoncrawl.logic.items.Weapon;
-import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.items.Apple;
 import com.codecool.dungeoncrawl.logic.items.HealthBar;
-import com.codecool.dungeoncrawl.logic.items.Item;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -27,10 +25,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.util.List;
-import java.util.Map;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Main extends Application {
     GameMap map = MapLoader.loadMap("/map.txt");
