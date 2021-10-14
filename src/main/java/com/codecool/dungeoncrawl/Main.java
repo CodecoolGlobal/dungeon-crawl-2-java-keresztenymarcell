@@ -7,10 +7,8 @@ import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.items.Item;
 import com.codecool.dungeoncrawl.logic.items.Weapon;
-import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.items.Apple;
 import com.codecool.dungeoncrawl.logic.items.HealthBar;
-import com.codecool.dungeoncrawl.logic.items.Item;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -27,10 +25,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.util.List;
-import java.util.Map;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Main extends Application {
     GameMap map = MapLoader.loadMap("/map.txt");
@@ -127,7 +123,8 @@ public class Main extends Application {
     }
 
     private List<Item> convertPlayerHealthToHealthBars() {
-        int healthScore = map.getPlayer().getHealth() / 5;
+        int divisorofHealthScore = 10;
+        int healthScore = map.getPlayer().getHealth() / divisorofHealthScore;
         List<Item> healthBars = new ArrayList<>();
         for (int i=0; i<healthScore; i++) {
             healthBars.add(new HealthBar());
@@ -153,6 +150,7 @@ public class Main extends Application {
     }
 
     private void refreshInventory() {
+        inventoryMap = MapLoader.loadMap("/inventory.txt");
         List<Item> inventory = map.getPlayer().getInventory();
         List<Item> healthBars = convertPlayerHealthToHealthBars();
         setInventoryBarItems(healthBars, 0);

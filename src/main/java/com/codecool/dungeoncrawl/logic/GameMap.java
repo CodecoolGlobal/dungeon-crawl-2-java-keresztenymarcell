@@ -6,9 +6,6 @@ import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 import com.codecool.dungeoncrawl.logic.utilities.Randomizer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class GameMap {
     private int width;
