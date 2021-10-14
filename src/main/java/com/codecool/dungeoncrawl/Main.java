@@ -115,22 +115,6 @@ public class Main extends Application {
         fillCanvas(map, canvas, context, contextStartPos[0], contextStartPos[1], canvasWidth, canvasHeight);
         fillCanvas(inventoryMap, inventoryCanvas, inventoryContext, 0, 0, canvasWidth, Tiles.TILE_WIDTH * 2);
 
-//        context.setFill(Color.BLACK);
-//
-//        context.fillRect(contextStartPos[0], contextStartPos[1], canvas.getWidth(), canvas.getHeight());
-//        for (int x = 0; x < canvasWidth / Tiles.TILE_WIDTH; x++) {
-//            for (int y = 0; y < canvasHeight / Tiles.TILE_WIDTH; y++) {
-//                Cell cell = map.getCell(x+contextStartPos[0], y+contextStartPos[1]);
-//                if (cell.getActor() != null) {
-//                    Tiles.drawTile(context, cell.getActor(), x, y);
-//                }else if (cell.getItem() != null){
-//                    Tiles.drawTile(context, cell.getItem(), x, y);
-//                }
-//                else {
-//                    Tiles.drawTile(context, cell, x, y);
-//                }
-//            }
-//        }
 
         if (map.getPlayer().getCell().getType() == CellType.LATTER){
             map = MapLoader.loadMap("/map2.txt");
