@@ -11,8 +11,8 @@ public enum CellType {
     BUSH("bush"),
     LATTER("latter"),
     HOUSE("house"),
-    INVENTORY("inventory");
-
+    INVENTORY("inventory"),
+    HEALTH("health");
 
 
 
