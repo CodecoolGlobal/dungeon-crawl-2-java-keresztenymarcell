@@ -131,7 +131,7 @@ public class Main extends Application {
     }
 
     private boolean ifIndexWithinCanvasWidth(int indexToCheck, int canvasWidth) {
-        return indexToCheck < canvasWidth/Tiles.TILE_WIDTH;
+        return indexToCheck < canvasWidth/Tiles.TILE_WIDTH - 2;
     }
 
     private void setInventoryBarItems(List<Item> items, int whichRowIndex) {
