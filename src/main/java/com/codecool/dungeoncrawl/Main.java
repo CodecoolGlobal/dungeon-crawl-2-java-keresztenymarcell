@@ -22,7 +22,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-    GameMap map = MapLoader.loadMap("/map3.txt");
+    GameMap map = MapLoader.loadMap("/map.txt");
     int canvasWidth = 512;      // make it divisible by 32!
     int canvasHeight = 512;
     Canvas canvas = new Canvas(canvasWidth, canvasHeight);

@@ -1,7 +1,7 @@
 package com.codecool.dungeoncrawl.logic;
 
 import com.codecool.dungeoncrawl.logic.actors.Thug;
-import com.codecool.dungeoncrawl.logic.actors.Ufo;
+import com.codecool.dungeoncrawl.logic.actors.Wizard;
 import com.codecool.dungeoncrawl.logic.items.Apple;
 import com.codecool.dungeoncrawl.logic.items.Key;
 import com.codecool.dungeoncrawl.logic.actors.Player;
@@ -65,7 +65,7 @@ public class MapLoader {
                             break;
                         case 'u':
                             cell.setType(CellType.FLOOR);
-                            new Ufo(cell);
+                            new Wizard(cell);
                             break;
                         case 'S':
                             cell.setType(CellType.FLOOR);
