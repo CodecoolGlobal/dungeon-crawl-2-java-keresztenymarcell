@@ -101,7 +101,12 @@ public class Player extends Actor {
         }
         this.cell.setItem(null);
 
-        System.out.println(inventory);
+    }
 
+    public String inventoryToText(){
+        StringBuilder ret = new StringBuilder();
+        inventory.forEach(i -> ret.append(i.getTileName()).append(" "));
+        System.out.println(ret);
+        return ret.toString();
     }
 }

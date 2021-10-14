@@ -22,13 +22,14 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-    GameMap map = MapLoader.loadMap();
+    GameMap map = MapLoader.loadMap("/map.txt");
     int canvasWidth = 512;      // make it divisible by 32!
     int canvasHeight = 512;
     Canvas canvas = new Canvas(canvasWidth, canvasHeight);
 
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
+    Label inventory = new Label();
 
     public static void main(String[] args) {
         launch(args);
@@ -37,12 +38,16 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         GridPane ui = new GridPane();
-        ui.setPrefWidth(200);
+        ui.setPrefWidth(500);
+        ui.setPrefHeight(100);
         ui.setPadding(new Insets(10));
         ui.setVgap(map.getHeight() * Tiles.TILE_WIDTH-70);
 
         ui.add(new Label("Health: "), 0, 0);
+        Label inventoryLabel = new Label("Inventory: ");
         ui.add(healthLabel, 1, 0);
+        ui.add(inventoryLabel, 2, 0);
+        ui.add(inventory, 2, 1);
 
         Button button = new Button("Pick up");
         button.setOnAction(new EventHandler<ActionEvent>() {
@@ -115,6 +120,7 @@ public class Main extends Application {
         }
 
         healthLabel.setText("" + map.getPlayer().getHealth());
+        inventory.setText(map.getPlayer().inventoryToText());
     }
 
     public int[] getFirstPos(Player player) {
