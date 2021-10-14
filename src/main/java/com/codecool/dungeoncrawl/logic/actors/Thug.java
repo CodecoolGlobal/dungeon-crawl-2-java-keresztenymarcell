@@ -2,9 +2,9 @@ package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 
-public class Skull extends Monster {
+public class Thug extends Monster {
 
-    public Skull(Cell cell) {
+    public Thug(Cell cell) {
         super(cell);
         setAttack(5);
         setHealth(30);
@@ -16,6 +16,6 @@ public class Skull extends Monster {
 
     @Override
     public String getTileName() {
-        return "skull";
+        return "thug";
     }
 }
