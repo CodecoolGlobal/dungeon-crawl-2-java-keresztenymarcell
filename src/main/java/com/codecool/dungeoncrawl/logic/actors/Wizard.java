@@ -3,9 +3,9 @@ package com.codecool.dungeoncrawl.logic.actors;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.utilities.Randomizer;
 
-public class Ufo extends Monster {
+public class Wizard extends Monster {
 
-    public Ufo(Cell cell) {
+    public Wizard(Cell cell) {
         super(cell);
         setAttack(3);
         setHealth(20);
@@ -31,6 +31,6 @@ public class Ufo extends Monster {
 
     @Override
     public String getTileName() {
-        return "ufo";
+        return "wizard";
     }
 }

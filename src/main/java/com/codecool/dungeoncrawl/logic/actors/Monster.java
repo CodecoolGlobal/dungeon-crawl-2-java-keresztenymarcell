@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 abstract public class Monster extends Actor{
-    public static List<Monster> haveMoved = new ArrayList<>();
+    public static List<Monster> hasMoved = new ArrayList<>();
 
     public Monster(Cell cell){
         super(cell);

@@ -32,26 +32,28 @@ public class GameMap {
                 else monster = null;
                 if(monster instanceof Skeleton){
                     int[] dir = Randomizer.chooseDirection();
-                    if(!Monster.haveMoved.contains(monster)) {
+                    if(!Monster.hasMoved.contains(monster)) {
                         monster.move(dir[0], dir[1]);
-                        Monster.haveMoved.add(monster);
+                        Monster.hasMoved.add(monster);
                     }
-                }else if(monster instanceof Ufo){
+                }else if(monster instanceof Wizard){
                     int[] place;
-                    if(!Monster.haveMoved.contains(monster)){
+                    if(!Monster.hasMoved.contains(monster)){
                         if(Randomizer.random.nextInt(8) < 5){
+                            System.out.println("step");
                             place = Randomizer.chooseDirection();
                             monster.move(place[0], place[1]);
                         }
                         else{
+                            System.out.println("jump");
                             ((Ufo)monster).teleport(Randomizer.getRandomCell(cells));
                         }
-                        Monster.haveMoved.add(monster);
+                        Monster.hasMoved.add(monster);
                     }
                 }
             }
         }
-        Monster.haveMoved.clear();
+        Monster.hasMoved.clear();
     }
 
     public Cell getCell(int x, int y) {

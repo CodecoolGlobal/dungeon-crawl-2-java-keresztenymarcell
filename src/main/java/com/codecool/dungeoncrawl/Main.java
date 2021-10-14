@@ -5,6 +5,7 @@ import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Player;
+import com.codecool.dungeoncrawl.logic.items.Item;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -19,6 +20,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+
+import java.util.List;
+import java.util.Map;
 
 public class Main extends Application {
 
@@ -38,8 +42,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         GridPane ui = new GridPane();
-        ui.setPrefWidth(500);
-        ui.setPrefHeight(100);
+        ui.setPrefWidth(200);
         ui.setPadding(new Insets(10));
         ui.setVgap(map.getHeight() * Tiles.TILE_WIDTH-70);
 
@@ -99,6 +102,12 @@ public class Main extends Application {
     }
 
     private void refresh() {
+        if (map.getPlayer().getCell().getType() == CellType.LATTER){
+            switchMap("/map2.txt");
+        }else if (map.getPlayer().getCell().getType() == CellType.HOUSE){
+            switchMap("/map3.txt");
+        }
+
         context.setFill(Color.BLACK);
         int[] contextStartPos = getFirstPos(map.getPlayer());
         context.fillRect(contextStartPos[0], contextStartPos[1], canvas.getWidth(), canvas.getHeight());
@@ -154,5 +163,21 @@ public class Main extends Application {
         }
 
         return new int[] {startX, startY};
+    }
+
+    private void switchMap(String mapName){
+
+        Player player = map.getPlayer();
+        List<Item> inventory = player.getInventory();
+        int playerHealth = player.getHealth();
+        int playerAttack = player.getAttack();
+        map = MapLoader.loadMap(mapName);
+
+        player = map.getPlayer();
+        player.setInventory(inventory);
+        player.setHealth(playerHealth);
+        player.setAttack(playerAttack);
+
+
     }
 }
