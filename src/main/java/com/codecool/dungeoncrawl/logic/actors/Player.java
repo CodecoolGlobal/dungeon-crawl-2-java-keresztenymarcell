@@ -3,9 +3,13 @@ package com.codecool.dungeoncrawl.logic.actors;
 import com.codecool.dungeoncrawl.App;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
+import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.items.Key;
 import com.codecool.dungeoncrawl.logic.items.Weapon;
 import com.codecool.dungeoncrawl.logic.items.*;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import org.w3c.dom.ls.LSOutput;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -16,17 +20,19 @@ public class Player extends Actor {
 
     private Weapon weapon;
 
-
     public Player(Cell cell) {
         super(cell);
         setAttack(5);
-        setHealth(50);
+        setHealth(1000);
     }
 
     @Override
     public void move(int dx, int dy) {
         Cell nextCell = getCell().getNeighbor(dx, dy);
         if(checkIfCanMove(nextCell)){
+            if(hasWon(nextCell)){
+                showGameOverMessage("You have won!");
+            }
             getCell().setActor(null);
             nextCell.setActor(this);
             setCell(nextCell);
@@ -39,7 +45,27 @@ public class Player extends Actor {
         }
         else if(nextCell.getActor() instanceof Monster){
             attack(nextCell);
+            if(!isAlive()){
+                showGameOverMessage("Game Over");
+
+            }
         }
+
+    }
+
+    public boolean hasWon(Cell cell){
+        return cell.getType() == CellType.PRIZE;
+    }
+
+    public void showGameOverMessage(String message){
+
+        Dialog<String > losingMessage = new Dialog<>();
+        losingMessage.setTitle("Message");
+        losingMessage.setContentText(message);
+        losingMessage.show();
+        losingMessage.getDialogPane().getButtonTypes().addAll(ButtonType.CLOSE);
+        losingMessage.setHeight(260);
+        losingMessage.setWidth(260);
 
     }
 
@@ -96,10 +122,33 @@ public class Player extends Actor {
         Item item = this.cell.getItem();
         if(item instanceof Apple){
             this.setHealth(getHealth() + ((Apple) item).getPlusHealth());
-        }else{
+        }else if(item != null){
             addItemToInventory(item);
+            if(item instanceof Weapon) weapon = (Weapon)item;
         }
         this.cell.setItem(null);
-//        System.out.println(inventory);
+
+    }
+
+    public boolean isAlive(){
+        return health > 0;
+    }
+
+    public String inventoryToText(){
+        StringBuilder ret = new StringBuilder();
+        if(inventory.size() > 0){
+            inventory.forEach(i -> {
+                ret.append(i.getTileName()).append(" ");
+            });
+        };
+        return ret.toString();
+    }
+
+    public void setWeapon(Weapon weapon){
+        this.weapon = weapon;
+    }
+
+    public Weapon getWeapon() {
+        return weapon;
     }
 }

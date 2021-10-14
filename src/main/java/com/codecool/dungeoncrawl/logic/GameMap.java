@@ -1,10 +1,10 @@
 package com.codecool.dungeoncrawl.logic;
 
-import com.codecool.dungeoncrawl.logic.actors.Actor;
-import com.codecool.dungeoncrawl.logic.actors.Monster;
-import com.codecool.dungeoncrawl.logic.actors.Player;
-import com.codecool.dungeoncrawl.logic.actors.Skeleton;
+import com.codecool.dungeoncrawl.logic.actors.*;
 import com.codecool.dungeoncrawl.logic.utilities.Randomizer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class GameMap {
@@ -34,15 +34,29 @@ public class GameMap {
                 }
                 else monster = null;
                 if(monster instanceof Skeleton){
+                    monster.hitHero(this);
                     int[] dir = Randomizer.chooseDirection();
-                    if(!Monster.haveMoved.contains(monster)) {
+                    if(!Monster.hasMoved.contains(monster)) {
                         monster.move(dir[0], dir[1]);
-                        Monster.haveMoved.add(monster);
+                        Monster.hasMoved.add(monster);
+                    }
+                }else if(monster instanceof Wizard){
+                    monster.hitHero(this);
+                    int[] place;
+                    if(!Monster.hasMoved.contains(monster)){
+                        if(Randomizer.random.nextInt(5) < 5){
+                            place = Randomizer.chooseDirection();
+                            monster.move(place[0], place[1]);
+                        }
+                        else{
+                            ((Wizard)monster).teleport(Randomizer.getRandomCell(cells));
+                        }
+                        Monster.hasMoved.add(monster);
                     }
                 }
             }
         }
-        Monster.haveMoved.clear();
+        Monster.hasMoved.clear();
     }
 
     public Cell getCell(int x, int y) {
@@ -65,4 +79,7 @@ public class GameMap {
         return height;
     }
 
+    public Cell[][] getCells() {
+        return cells;
+    }
 }
