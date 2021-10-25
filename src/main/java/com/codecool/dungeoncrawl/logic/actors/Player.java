@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Player extends Actor {
+    private String name;
 
     private List<Item> inventory = new LinkedList<>();
 
@@ -134,5 +135,9 @@ public class Player extends Actor {
 
     public Weapon getWeapon() {
         return weapon;
+    }
+
+    public String getName() {
+        return name;
     }
 }
