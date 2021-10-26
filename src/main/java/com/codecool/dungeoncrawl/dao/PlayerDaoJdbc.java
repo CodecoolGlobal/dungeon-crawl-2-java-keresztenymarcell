@@ -1,9 +1,11 @@
 package com.codecool.dungeoncrawl.dao;
 
+import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.model.PlayerModel;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerDaoJdbc implements PlayerDao {
@@ -33,16 +35,69 @@ public class PlayerDaoJdbc implements PlayerDao {
 
     @Override
     public void update(PlayerModel player) {
+        try(Connection conn = dataSource.getConnection()){
+            String sql = "UPDATE player SET hp = ?, x = ?, y = ? WHERE player_name = ?";
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setInt(1, player.getHp());
+            statement.setInt(2, player.getX());
+            statement.setInt(3, player.getY());
+            statement.setString(4, player.getPlayerName());
+            statement.executeUpdate();
 
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public PlayerModel get(int id) {
-        return null;
+        try (Connection conn = dataSource.getConnection()){
+            String sql = "SELECT player_name, hp, x, y FROM player";
+            ResultSet rs = conn.createStatement().executeQuery(sql);
+
+            String playerName = rs.getString(1);
+            int hp = rs.getInt(2);
+            int x = rs.getInt(3);
+            int y = rs.getInt(4);
+            return new PlayerModel(playerName, hp, x ,y);
+
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public List<PlayerModel> getAll() {
-        return null;
+        try(Connection conn = dataSource.getConnection()){
+            String sql = "SELECT player_name, hp, x, y FROM player";
+            ResultSet rs = conn.createStatement().executeQuery(sql);
+            List<PlayerModel> result = new ArrayList<>();
+            while (rs.next()) {
+                PlayerModel player = new PlayerModel(rs.getString(1), rs.getInt(2), rs.getInt(3), rs.getInt(4));
+                result.add(player);
+            }
+            return result;
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }
     }
+
+    @Override
+    public int getIdByName(String name) {
+        try (Connection conn = dataSource.getConnection()) {
+            String sql = "SELECT id FROM player WHERE player_name = ?";
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setString(1, name);
+            ResultSet rs = st.executeQuery();
+             if(!rs.next()){
+                 return -1;
+             }
+             return rs.getInt(1);
+
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+
 }
