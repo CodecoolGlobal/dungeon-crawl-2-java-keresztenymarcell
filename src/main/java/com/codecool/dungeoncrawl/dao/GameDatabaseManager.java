@@ -20,6 +20,8 @@ public class GameDatabaseManager {
         playerDao.add(model);
     }
 
+
+
     private DataSource connect() throws SQLException {
         PGSimpleDataSource dataSource = new PGSimpleDataSource();
         String dbName = System.getenv("PSQL_DB_NAME");
