@@ -1,16 +1,20 @@
 package com.codecool.dungeoncrawl.dao;
 
 import com.codecool.dungeoncrawl.model.GameState;
+import com.codecool.dungeoncrawl.model.PlayerModel;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameStateDaoJdbc implements GameStateDao {
     private DataSource dataSource;
+    private PlayerDao playerDao;
 
-    GameStateDaoJdbc(DataSource dataSource) {
+    GameStateDaoJdbc(DataSource dataSource, PlayerDao playerDao) {
         this.dataSource = dataSource;
+        this.playerDao = playerDao;
     }
 
     @Override
@@ -48,12 +52,59 @@ public class GameStateDaoJdbc implements GameStateDao {
     }
 
     @Override
-    public GameState get(int id) {
-        return null;
+    public GameState get(int id) {      // id = player_id
+        try (Connection conn = dataSource.getConnection()) {
+            // FIRST STEP - read current_map and saved at according to player_id
+            String sql = "SELECT id, current_map, saved_at FROM game_state WHERE player_id = ?";
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
+            if (!rs.next()) {
+                return null;
+            }
+
+            int gameStateId = rs.getInt(1);
+            String currentMap = rs.getString(2);
+            Date savedAt = rs.getDate(3);
+
+            // SECOND STEP - find Player with id we got as a result of the first query
+            PlayerModel player = playerDao.get(id);
+
+            // FINISH - create and return new GameState class instance
+            GameState gameState = new GameState(currentMap, savedAt, player);
+            gameState.setId(gameStateId);
+            return gameState;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public List<GameState> getAll() {
-        return null;
+        try (Connection conn = dataSource.getConnection()) {
+            // FIRST STEP - read book_id, author_id and title
+            String sql = "SELECT id, current_map, saved_at, player_id FROM game_state";
+            ResultSet rs = conn.createStatement().executeQuery(sql);
+
+            List<GameState> result = new ArrayList<>();
+            while (rs.next()) {
+                // SECOND STEP - read all data from result set
+                int gameStateId = rs.getInt(1);
+                String currentMap = rs.getString(2);
+                Date savedAt = rs.getDate(3);
+                int playerId = rs.getInt(4);
+
+                // THIRD STEP - find player with id == playerId
+                PlayerModel player = playerDao.get(playerId);
+
+                // FOURTH STEP - create a new GameState class instance and add it to result list.
+                GameState gameState = new GameState(currentMap, savedAt, player);
+                gameState.setId(gameStateId);
+                result.add(gameState);
+            }
+            return result;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
