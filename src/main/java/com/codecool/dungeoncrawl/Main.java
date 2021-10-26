@@ -14,6 +14,9 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
@@ -25,6 +28,7 @@ import javafx.stage.Stage;
 import java.util.List;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class Main extends Application {
     GameMap map = MapLoader.loadMap("/map.txt");
@@ -101,8 +105,10 @@ public class Main extends Application {
                     break;
                 case S:
                     Object source = keyEvent.getSource();
-                    if(keyEvent.isControlDown() && !(source instanceof Button))
-                        System.out.println("save");
+                    if(keyEvent.isControlDown() && !(source instanceof Button)){
+                        String name = saveGameButton();
+                        System.out.println(name);
+                    }
                     break;
             }
         }
@@ -221,5 +227,21 @@ public class Main extends Application {
         player.setAttack(playerAttack);
         player.setWeapon(weapon);
 
+    }
+
+    private String saveGameButton(){
+
+        TextInputDialog dialog = new TextInputDialog("alpha");
+        ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType saveButton = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().setAll(cancelButton, saveButton);
+        dialog.setTitle("title");
+        dialog.setHeaderText("Name:");
+
+        Optional<String> name = dialog.showAndWait();
+        if(name.isPresent()){
+            return dialog.getEditor().getText();
+        }
+        else return "";
     }
 }
