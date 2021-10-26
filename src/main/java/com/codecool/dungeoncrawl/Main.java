@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
@@ -97,6 +98,11 @@ public class Main extends Application {
                     map.getPlayer().move(1, 0);
                     map.moveMonsters();
                     refresh();
+                    break;
+                case S:
+                    Object source = keyEvent.getSource();
+                    if(keyEvent.isControlDown() && !(source instanceof Button))
+                        System.out.println("save");
                     break;
             }
         }
