@@ -3,22 +3,26 @@ package com.codecool.dungeoncrawl.logic;
 import com.codecool.dungeoncrawl.logic.actors.Actor;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
-import com.codecool.dungeoncrawl.logic.items.Item;
-import com.codecool.dungeoncrawl.logic.items.Key;
-import com.codecool.dungeoncrawl.logic.items.Sword;
-import com.codecool.dungeoncrawl.logic.items.Weapon;
+import com.codecool.dungeoncrawl.logic.items.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerTest {
 
     GameMap map = new GameMap(5, 5, CellType.FLOOR);
+    Player player;
+
+    @BeforeEach
+    void setupPlayer(){
+         player = new Player(map.getCell(0, 0));
+    }
 
     @Test
     void hasWon_PlayerStandsOnPrize_ReturnTrue(){
         Cell prize = map.getCell(0,0);
         prize.setType(CellType.PRIZE);
-        Player player = new Player(map.getCell(0,1));
 
         assertTrue(player.hasWon(prize));
     }
@@ -27,14 +31,12 @@ public class PlayerTest {
     void hasWon_PlayerNotStandsOnPrize_ReturnFalse(){
         Cell floor = map.getCell(0,0);
         floor.setType(CellType.PRIZE);
-        Player player = new Player(map.getCell(0,1));
 
         assertTrue(player.hasWon(floor));
     }
 
     @Test
     void hasKey_PlayerHasKey_ReturnTrue(){
-        Player player = new Player(map.getCell(0,1));
         Item key = new Key();
         player.addItemToInventory(key);
 
@@ -43,14 +45,12 @@ public class PlayerTest {
 
     @Test
     void hasKey_PlayerDontHaveKey_ReturnTrue() {
-        Player player = new Player(map.getCell(0, 1));
 
         assertFalse(player.hasKey());
     }
 
     @Test
     void removeKey_removeKeyFromInventory(){
-        Player player = new Player(map.getCell(0, 1));
         Item key = new Key();
         player.addItemToInventory(key);
 
@@ -61,7 +61,6 @@ public class PlayerTest {
 
     @Test
     void addItemToInventory_PlayerHasItemAfterAdding(){
-        Player player = new Player(map.getCell(0, 1));
         Key key = new Key();
 
         player.addItemToInventory(key);
@@ -71,7 +70,6 @@ public class PlayerTest {
 
     @Test
     void isAlive_playerHealthMoreThanZero_ReturnTrue(){
-        Player player = new Player(map.getCell(0, 1));
         player.setHealth(30);
 
         assertTrue(player.isAlive());
@@ -79,13 +77,30 @@ public class PlayerTest {
 
     @Test
     void isAlive_PlayerHealthZero(){
-        Player player = new Player(map.getCell(0, 1));
         player.setHealth(0);
 
         assertFalse(player.isAlive());
+    }
+
+    @Test
+    void pickUpItem_ItemIsApple_HealthPointAdded(){
+        Item apple = new Apple(map.getCell(0,1));
+        player.getCell().setItem(apple);
+        player.pickUpItem();
+
+        assertEquals(130, player.getHealth());
 
     }
 
+    @Test
+    void pickUpItem_ItemIsNotNullSoItIsAnItem_ItemAddedToInventory(){
+        Item sword = new Sword(map.getCell(0, 1));
+        player.getCell().setItem(sword);
 
+        player.pickUpItem();
+
+        assertEquals(sword, player.getInventory().get(0));
+        assertNull(player.getCell().getItem());
+    }
 
 }
