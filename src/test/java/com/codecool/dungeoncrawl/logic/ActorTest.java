@@ -1,5 +1,6 @@
 package com.codecool.dungeoncrawl.logic;
 
+import com.codecool.dungeoncrawl.logic.actors.Actor;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 import org.junit.jupiter.api.Test;
@@ -16,7 +17,7 @@ class ActorTest {
 
         assertEquals(2, player.getX());
         assertEquals(1, player.getY());
-        assertEquals(null, gameMap.getCell(1, 1).getActor());
+        assertNull(gameMap.getCell(1, 1).getActor());
         assertEquals(player, gameMap.getCell(2, 1).getActor());
     }
 
@@ -50,5 +51,27 @@ class ActorTest {
         assertEquals(2, skeleton.getX());
         assertEquals(1, skeleton.getY());
         assertEquals(skeleton, gameMap.getCell(2, 1).getActor());
+    }
+
+    @Test
+    void checkIfCanMove_NextCellInputNeedToReturnFalse_False(){
+        Cell closedDoor = gameMap.getCell(0,0);
+        Cell wall = gameMap.getCell(1,0);
+        Cell tree = gameMap.getCell(1,1);
+        Cell empty = gameMap.getCell(2,1);
+        closedDoor.setType(CellType.CLOSED_DOOR);
+        wall.setType(CellType.WALL);
+        tree.setType(CellType.TREE);
+        empty.setType(CellType.EMPTY);
+
+        Actor player = new Player(gameMap.getCell(2,2));
+
+        assertFalse(player.checkIfCanMove(closedDoor));
+        assertFalse(player.checkIfCanMove(wall));
+        assertFalse(player.checkIfCanMove(tree));
+        assertFalse(player.checkIfCanMove(empty));
+
+
+
     }
 }
