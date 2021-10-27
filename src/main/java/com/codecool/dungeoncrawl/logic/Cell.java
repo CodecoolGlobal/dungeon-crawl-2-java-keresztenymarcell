@@ -7,7 +7,7 @@ public class Cell implements Drawable {
     private CellType type;
     private Actor actor;
     private Item item;
-    private GameMap gameMap;
+    private transient GameMap gameMap;
     private int x, y;
 
     Cell(GameMap gameMap, int x, int y, CellType type) {

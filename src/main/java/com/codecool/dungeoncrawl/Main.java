@@ -248,11 +248,11 @@ public class Main extends Application {
                         continue;
                     }
                     map.getPlayer().setName(name);
-                    manager.updatePlayer(map.getPlayer());
+                    manager.updatePlayer(map.getPlayer(), map);
                 }
                 else{
                     map.getPlayer().setName(name);
-                    manager.savePlayer(map.getPlayer());
+                    manager.savePlayer(map.getPlayer(), map);
                 }
                 break;
             }
