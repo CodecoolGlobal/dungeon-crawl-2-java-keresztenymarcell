@@ -1,28 +1,77 @@
 package com.codecool.dungeoncrawl.dao;
 
+import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.actors.Player;
+import com.codecool.dungeoncrawl.logic.items.Item;
+import com.codecool.dungeoncrawl.model.GameState;
 import com.codecool.dungeoncrawl.model.GameState;
 import com.codecool.dungeoncrawl.model.PlayerModel;
+import com.google.gson.Gson;
 import org.postgresql.ds.PGSimpleDataSource;
 
 import javax.sql.DataSource;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.util.List;
 
 public class GameDatabaseManager {
     private PlayerDao playerDao;
     private GameStateDao gameStateDao;
     private InventoryDao inventoryDao;
+//    private InventoryDao inventoryDao;
 
     public void setup() throws SQLException {
         DataSource dataSource = connect();
         playerDao = new PlayerDaoJdbc(dataSource);
         gameStateDao = new GameStateDaoJdbc(dataSource, playerDao);
         inventoryDao = new InventoryDaoJdbc(dataSource);
+//        inventoryDao = new InventoryDaoJdbc(dataSource);
     }
 
-    public void savePlayer(Player player) {
-        PlayerModel playerModel = new PlayerModel(player);
-        playerDao.add(playerModel);
+    public void saveOrUpdateGame(Player player, GameMap map) {
+        if (playerDao.getIdByName(player.getName()) == -1) {
+            savePlayer(player, map);
+        } else {
+            updatePlayer(player, map);
+        }
+    }
+
+    public void savePlayer(Player player, GameMap map) {
+        PlayerModel model = new PlayerModel(player);
+        playerDao.add(model);
+//        inventoryDao.add(model);
+        saveGameState(map, model);
+    }
+
+    public void updatePlayer(Player player, GameMap map) {
+        PlayerModel model = new PlayerModel(player);
+        playerDao.update(model);
+//        inventoryDao.update(model);
+        updateGameState(map, model);
+    }
+
+    public void saveGameState(GameMap map, PlayerModel playerModel) {
+        String currentMap = new Gson().toJson(map);
+        java.util.Date utilDate = new java.util.Date();
+        Date savedAt = new java.sql.Date(utilDate.getTime());
+        GameState gameState = new GameState(currentMap, savedAt, playerModel);
+        gameStateDao.add(gameState);
+    }
+
+    public void updateGameState(GameMap map, PlayerModel playerModel) {
+        String currentMap = new Gson().toJson(map);
+        java.util.Date utilDate = new java.util.Date();
+        Date savedAt = new java.sql.Date(utilDate.getTime());
+        GameState gameState = new GameState(currentMap, savedAt, playerModel);
+        gameStateDao.update(gameState);
+    }
+
+    public Player loadPlayer() {
+        throw new IllegalArgumentException();
+    }
+
+    public GameMap loadMap() {
+        throw new IllegalArgumentException();
     }
 
     public void updatePlayer(Player player){
