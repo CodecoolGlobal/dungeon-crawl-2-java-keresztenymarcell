@@ -11,11 +11,13 @@ import java.sql.SQLException;
 public class GameDatabaseManager {
     private PlayerDao playerDao;
     private GameStateDao gameStateDao;
+    private InventoryDao inventoryDao;
 
     public void setup() throws SQLException {
         DataSource dataSource = connect();
         playerDao = new PlayerDaoJdbc(dataSource);
         gameStateDao = new GameStateDaoJdbc(dataSource, playerDao);
+        inventoryDao = new InventoryDaoJdbc(dataSource);
     }
 
     public void savePlayer(Player player) {
