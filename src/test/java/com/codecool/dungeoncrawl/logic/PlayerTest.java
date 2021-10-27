@@ -103,4 +103,42 @@ public class PlayerTest {
         assertNull(player.getCell().getItem());
     }
 
+    @Test
+    void attack_PlayerAttacksEnemy_HealthGetsLowerByAttackPower(){
+        Skeleton enemy = new Skeleton(map.getCell(0,1));
+        Cell nextCell = map.getCell(0,1);
+        nextCell.setActor(enemy);
+
+        player.attack(nextCell);
+
+        assertEquals(3, enemy.getHealth());
+    }
+
+    @Test
+    void attack_PlayerHaveWeapon_HealthGetsLowerByWeaponDamage(){
+        Skeleton enemy = new Skeleton(map.getCell(0,1));
+        Cell nextCell = map.getCell(0,1);
+        Weapon sword = new Sword(map.getCell(0, 2));
+        player.setWeapon(sword);
+        nextCell.setActor(enemy);
+
+
+        player.attack(nextCell);
+
+        assertEquals(2, enemy.getHealth());
+    }
+
+    @Test
+    void attack_PlayerKillsEnemy_EnemyEqualsNull(){
+        Skeleton enemy = new Skeleton(map.getCell(0,1));
+        Cell nextCell = map.getCell(0,1);
+        nextCell.setActor(enemy);
+
+        player.attack(nextCell);
+        player.attack(nextCell);
+        assertNull(nextCell.getActor());
+    }
+
+
+
 }
