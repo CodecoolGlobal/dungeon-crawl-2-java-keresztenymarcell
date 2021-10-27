@@ -16,5 +16,16 @@ CREATE TABLE public.player (
     y integer NOT NULL
 );
 
+DROP TABLE IF EXISTS public.inventory;
+CREATE TABLE public.inventory(
+    player_id integer NOT NULL,
+    sword_count integer NOT NULL,
+    key_count integer NOT NULL
+);
+
 ALTER TABLE ONLY public.game_state
     ADD CONSTRAINT fk_player_id FOREIGN KEY (player_id) REFERENCES public.player(id);
+
+ALTER TABLE ONLY public.inventory
+    ADD CONSTRAINT fk_player_id FOREIGN KEY (player_id) REFERENCES public.player(id);
+
