@@ -35,6 +35,8 @@ public class GameDatabaseManager {
 
     public void updatePlayer(Player player, GameMap map) {
         PlayerModel model = new PlayerModel(player);
+        int playerId = playerDao.getIdByName(player.getName());
+        model.setId(playerId);
         playerDao.update(model);
         inventoryDao.update(model);
         updateGameState(map, model);
@@ -53,6 +55,8 @@ public class GameDatabaseManager {
         java.util.Date utilDate = new java.util.Date();
         Date savedAt = new java.sql.Date(utilDate.getTime());
         GameState gameState = new GameState(currentMap, savedAt, playerModel);
+        int gameStateId = gameStateDao.getGameStateIdByPlayerName(map.getPlayer().getName());
+        gameState.setId(gameStateId);
         gameStateDao.update(gameState);
     }
 

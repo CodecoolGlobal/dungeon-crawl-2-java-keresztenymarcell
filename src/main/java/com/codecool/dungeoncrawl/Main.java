@@ -238,7 +238,6 @@ public class Main extends Application {
             if(opt.isPresent()){
                 name = opt.get();
                 if(manager.checkName(name)){
-                    System.out.println("in");
                     Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
                     confirm.setTitle("Confirm");
                     confirm.setHeaderText("Would you like to overwrite the already existing state?");

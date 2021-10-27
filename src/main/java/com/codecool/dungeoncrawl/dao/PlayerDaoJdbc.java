@@ -36,12 +36,13 @@ public class PlayerDaoJdbc implements PlayerDao {
     @Override
     public void update(PlayerModel player) {
         try(Connection conn = dataSource.getConnection()){
-            String sql = "UPDATE player SET hp = ?, x = ?, y = ? WHERE player_name = ?";
+            String sql = "UPDATE player SET id = ?, hp = ?, x = ?, y = ? WHERE player_name = ?";
             PreparedStatement statement = conn.prepareStatement(sql);
-            statement.setInt(1, player.getHp());
-            statement.setInt(2, player.getX());
-            statement.setInt(3, player.getY());
-            statement.setString(4, player.getPlayerName());
+            statement.setInt(1, player.getId());
+            statement.setInt(2, player.getHp());
+            statement.setInt(3, player.getX());
+            statement.setInt(4, player.getY());
+            statement.setString(5, player.getPlayerName());
             statement.executeUpdate();
 
         }catch (SQLException e){
