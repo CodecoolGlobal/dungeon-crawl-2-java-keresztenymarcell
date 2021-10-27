@@ -19,8 +19,7 @@ CREATE TABLE public.player (
 DROP TABLE IF EXISTS public.inventory;
 CREATE TABLE public.inventory(
     player_id integer NOT NULL,
-    sword_count integer NOT NULL,
-    key_count integer NOT NULL
+    inventory text
 );
 
 ALTER TABLE ONLY public.game_state
