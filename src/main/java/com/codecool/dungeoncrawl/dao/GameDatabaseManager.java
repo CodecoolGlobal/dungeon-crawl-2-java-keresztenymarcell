@@ -16,13 +16,13 @@ import java.util.List;
 public class GameDatabaseManager {
     private PlayerDao playerDao;
     private GameStateDao gameStateDao;
-    private InventoryDao inventoryDao;
+//    private InventoryDao inventoryDao;
 
     public void setup() throws SQLException {
         DataSource dataSource = connect();
         playerDao = new PlayerDaoJdbc(dataSource);
         gameStateDao = new GameStateDaoJdbc(dataSource, playerDao);
-        inventoryDao = new InventoryDaoJdbc(dataSource);
+//        inventoryDao = new InventoryDaoJdbc(dataSource);
     }
 
     public void saveOrUpdateGame(Player player, GameMap map) {
@@ -36,14 +36,14 @@ public class GameDatabaseManager {
     public void savePlayer(Player player, GameMap map) {
         PlayerModel model = new PlayerModel(player);
         playerDao.add(model);
-        inventoryDao.add(model);
+//        inventoryDao.add(model);
         saveGameState(map, model);
     }
 
     public void updatePlayer(Player player, GameMap map) {
         PlayerModel model = new PlayerModel(player);
         playerDao.update(model);
-        inventoryDao.update(model);
+//        inventoryDao.update(model);
         saveGameState(map, model);
     }
 
