@@ -40,4 +40,8 @@ public class GameDatabaseManager {
 
         return dataSource;
     }
+
+    public PlayerDao getPlayerDao(){
+        return playerDao;
+    }
 }

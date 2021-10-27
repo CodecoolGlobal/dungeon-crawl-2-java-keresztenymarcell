@@ -1,5 +1,8 @@
 package com.codecool.dungeoncrawl;
 
+import com.codecool.dungeoncrawl.dao.GameDatabaseManager;
+import com.codecool.dungeoncrawl.dao.PlayerDao;
+import com.codecool.dungeoncrawl.dao.PlayerDaoJdbc;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.GameMap;
@@ -41,6 +44,7 @@ public class Main extends Application {
     Canvas inventoryCanvas = new Canvas(inventoryCanvasWidth, inventoryCanvasHeight);
     GraphicsContext context = canvas.getGraphicsContext2D();
     GraphicsContext inventoryContext = inventoryCanvas.getGraphicsContext2D();
+    private final GameDatabaseManager manager = new GameDatabaseManager();
 
     public static void main(String[] args) {
         launch(args);
@@ -48,6 +52,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        manager.setup();
         GridPane ui = new GridPane();
         ui.setPrefWidth(500);
         ui.setPadding(new Insets(10));
@@ -74,7 +79,6 @@ public class Main extends Application {
         refresh();
         scene.setOnKeyPressed(this::onKeyPressed);
         button.setOnKeyPressed(this::onKeyPressed);
-//        scene.setOnKeyReleased(this::onKeyReleased);
 
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
@@ -106,8 +110,7 @@ public class Main extends Application {
                 case S:
                     Object source = keyEvent.getSource();
                     if(keyEvent.isControlDown() && !(source instanceof Button)){
-                        String name = saveGameButton();
-                        System.out.println(name);
+                        saveGameButton();
                     }
                     break;
             }
@@ -229,7 +232,7 @@ public class Main extends Application {
 
     }
 
-    private String saveGameButton(){
+    private void saveGameButton(){
 
         TextInputDialog dialog = new TextInputDialog("alpha");
         ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
@@ -238,10 +241,13 @@ public class Main extends Application {
         dialog.setTitle("title");
         dialog.setHeaderText("Name:");
 
-        Optional<String> name = dialog.showAndWait();
-        if(name.isPresent()){
-            return dialog.getEditor().getText();
+        Optional<String> opt = dialog.showAndWait();
+        String name;
+        if(opt.isPresent()){
+            name = dialog.getEditor().getText();
         }
-        else return "";
+        else name = "";
+        map.getPlayer().setName(name);
+        manager.savePlayer(map.getPlayer());
     }
 }
