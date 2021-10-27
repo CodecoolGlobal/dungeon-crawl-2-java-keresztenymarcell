@@ -52,14 +52,21 @@ public class PlayerDaoJdbc implements PlayerDao {
     @Override
     public PlayerModel get(int id) {
         try (Connection conn = dataSource.getConnection()){
-            String sql = "SELECT player_name, hp, x, y FROM player";
-            ResultSet rs = conn.createStatement().executeQuery(sql);
+            String sql = "SELECT player_name, hp, x, y FROM player WHERE id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
 
-            String playerName = rs.getString(1);
-            int hp = rs.getInt(2);
-            int x = rs.getInt(3);
-            int y = rs.getInt(4);
-            return new PlayerModel(playerName, hp, x ,y);
+            if(rs.next()){
+                String playerName = rs.getString(1);
+                int hp = rs.getInt(2);
+                int x = rs.getInt(3);
+                int y = rs.getInt(4);
+                return new PlayerModel(playerName, hp, x ,y);
+            }
+            else{
+                return null;
+            }
 
         }catch(SQLException e){
             throw new RuntimeException(e);

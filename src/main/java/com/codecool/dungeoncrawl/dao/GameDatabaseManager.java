@@ -1,6 +1,7 @@
 package com.codecool.dungeoncrawl.dao;
 
 import com.codecool.dungeoncrawl.logic.actors.Player;
+import com.codecool.dungeoncrawl.model.GameState;
 import com.codecool.dungeoncrawl.model.PlayerModel;
 import org.postgresql.ds.PGSimpleDataSource;
 
@@ -18,11 +19,14 @@ public class GameDatabaseManager {
     }
 
     public void savePlayer(Player player) {
-        PlayerModel model = new PlayerModel(player);
-        playerDao.add(model);
+        PlayerModel playerModel = new PlayerModel(player);
+        playerDao.add(playerModel);
     }
 
-
+    public boolean checkName(String name){
+        int id = playerDao.getIdByName(name);
+        return playerDao.get(id) != null;
+    }
 
     private DataSource connect() throws SQLException {
         PGSimpleDataSource dataSource = new PGSimpleDataSource();

@@ -245,6 +245,12 @@ public class Main extends Application {
         String name;
         if(opt.isPresent()){
             name = dialog.getEditor().getText();
+            if(!manager.checkName(name)){
+                System.out.println("no such name");
+            }
+            else{
+                System.out.println("exists");
+            }
         }
         else name = "";
         map.getPlayer().setName(name);
