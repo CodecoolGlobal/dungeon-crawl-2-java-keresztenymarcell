@@ -25,10 +25,25 @@ public class GameDatabaseManager {
         inventoryDao = new InventoryDaoJdbc(dataSource);
     }
 
+    public void saveOrUpdateGame(Player player, GameMap map) {
+        if (playerDao.getIdByName(player.getName()) == -1) {
+            savePlayer(player, map);
+        } else {
+            updatePlayer(player, map);
+        }
+    }
+
     public void savePlayer(Player player, GameMap map) {
         PlayerModel model = new PlayerModel(player);
         playerDao.add(model);
         inventoryDao.add(model);
+        saveGameState(map, model);
+    }
+
+    public void updatePlayer(Player player, GameMap map) {
+        PlayerModel model = new PlayerModel(player);
+        playerDao.update(model);
+        inventoryDao.update(model);
         saveGameState(map, model);
     }
 
@@ -39,6 +54,24 @@ public class GameDatabaseManager {
         GameState gameState = new GameState(currentMap, savedAt, playerModel);
         gameStateDao.add(gameState);
     }
+
+    public void updateGameState(GameMap map, PlayerModel playerModel) {
+        String currentMap = new Gson().toJson(map);
+        java.util.Date utilDate = new java.util.Date();
+        Date savedAt = new java.sql.Date(utilDate.getTime());
+        GameState gameState = new GameState(currentMap, savedAt, playerModel);
+        gameStateDao.update(gameState);
+    }
+
+    public Player loadPlayer() {
+        throw new IllegalArgumentException();
+    }
+
+    public GameMap loadMap() {
+        throw new IllegalArgumentException();
+    }
+
+
 
     private DataSource connect() throws SQLException {
         PGSimpleDataSource dataSource = new PGSimpleDataSource();
