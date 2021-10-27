@@ -249,13 +249,12 @@ public class Main extends Application {
                     }
                     map.getPlayer().setName(name);
                     manager.updatePlayer(map.getPlayer());
-                    break;
                 }
                 else{
                     map.getPlayer().setName(name);
                     manager.savePlayer(map.getPlayer());
-                    break;
                 }
+                break;
             }
             break;
         }
