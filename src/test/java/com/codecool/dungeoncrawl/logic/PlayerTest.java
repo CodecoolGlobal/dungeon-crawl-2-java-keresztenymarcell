@@ -5,6 +5,8 @@ import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 import com.codecool.dungeoncrawl.logic.items.Item;
 import com.codecool.dungeoncrawl.logic.items.Key;
+import com.codecool.dungeoncrawl.logic.items.Sword;
+import com.codecool.dungeoncrawl.logic.items.Weapon;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -55,6 +57,33 @@ public class PlayerTest {
         player.removeKey();
 
         assertFalse(player.hasKey());
+    }
+
+    @Test
+    void addItemToInventory_PlayerHasItemAfterAdding(){
+        Player player = new Player(map.getCell(0, 1));
+        Key key = new Key();
+
+        player.addItemToInventory(key);
+
+        assertEquals(key, player.getInventory().get(0));
+    }
+
+    @Test
+    void isAlive_playerHealthMoreThanZero_ReturnTrue(){
+        Player player = new Player(map.getCell(0, 1));
+        player.setHealth(30);
+
+        assertTrue(player.isAlive());
+    }
+
+    @Test
+    void isAlive_PlayerHealthZero(){
+        Player player = new Player(map.getCell(0, 1));
+        player.setHealth(0);
+
+        assertFalse(player.isAlive());
+
     }
 
 
