@@ -44,7 +44,7 @@ public class GameDatabaseManager {
         PlayerModel model = new PlayerModel(player);
         playerDao.update(model);
 //        inventoryDao.update(model);
-        saveGameState(map, model);
+        updateGameState(map, model);
     }
 
     public void saveGameState(GameMap map, PlayerModel playerModel) {
