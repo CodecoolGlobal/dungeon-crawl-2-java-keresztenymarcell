@@ -19,7 +19,7 @@ public abstract class Actor implements Drawable {
 
     abstract public void attack(Cell cell);
 
-    protected boolean checkIfCanMove(Cell nextCell){
+    public boolean checkIfCanMove(Cell nextCell){
         CellType type = nextCell.getType();
         return type != CellType.WALL
                 && type != CellType.CLOSED_DOOR

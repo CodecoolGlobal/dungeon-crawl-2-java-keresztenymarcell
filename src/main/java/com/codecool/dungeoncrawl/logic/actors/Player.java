@@ -64,11 +64,11 @@ public class Player extends Actor {
 
     }
 
-    private boolean hasKey(){
+    public boolean hasKey(){
         return this.inventory.stream().anyMatch(x -> x instanceof Key);
     }
 
-    private void removeKey(){
+    public void removeKey(){
         for(Item item: inventory){
             if(item instanceof Key){
                 inventory.remove(item);
