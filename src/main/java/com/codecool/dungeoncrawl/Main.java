@@ -16,10 +16,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
@@ -234,26 +231,43 @@ public class Main extends Application {
 
     private void saveGameButton(){
 
-        TextInputDialog dialog = new TextInputDialog("alpha");
+        String defaultText = "alpha", name;
+
+        while(true){
+            Optional<String> opt = showDialog(defaultText);
+            if(opt.isPresent()){
+                name = opt.get();
+                if(manager.checkName(name)){
+                    System.out.println("in");
+                    Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                    confirm.setTitle("Confirm");
+                    confirm.setHeaderText("Would you like to overwrite the already existing state?");
+                    Optional<ButtonType> result = confirm.showAndWait();
+                    if(result.get() != ButtonType.OK){
+                        defaultText = name;
+                        continue;
+                    }
+                    map.getPlayer().setName(name);
+                    manager.updatePlayer(map.getPlayer());
+                    break;
+                }
+                else{
+                    map.getPlayer().setName(name);
+                    manager.savePlayer(map.getPlayer());
+                    break;
+                }
+            }
+            break;
+        }
+    }
+
+    private Optional<String> showDialog(String name){
+        TextInputDialog dialog = new TextInputDialog(name);
         ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
         ButtonType saveButton = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().setAll(cancelButton, saveButton);
         dialog.setTitle("title");
         dialog.setHeaderText("Name:");
-
-        Optional<String> opt = dialog.showAndWait();
-        String name;
-        if(opt.isPresent()){
-            name = dialog.getEditor().getText();
-            if(!manager.checkName(name)){
-                System.out.println("no such name");
-            }
-            else{
-                System.out.println("exists");
-            }
-        }
-        else name = "";
-        map.getPlayer().setName(name);
-        manager.savePlayer(map.getPlayer());
+        return dialog.showAndWait();
     }
 }

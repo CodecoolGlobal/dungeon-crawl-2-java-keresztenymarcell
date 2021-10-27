@@ -23,6 +23,11 @@ public class GameDatabaseManager {
         playerDao.add(playerModel);
     }
 
+    public void updatePlayer(Player player){
+        PlayerModel playerModel = new PlayerModel(player);
+        playerDao.update(playerModel);
+    }
+
     public boolean checkName(String name){
         int id = playerDao.getIdByName(name);
         return playerDao.get(id) != null;
