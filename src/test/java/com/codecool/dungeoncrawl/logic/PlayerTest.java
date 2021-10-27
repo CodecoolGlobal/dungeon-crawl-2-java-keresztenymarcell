@@ -40,16 +40,22 @@ public class PlayerTest {
     }
 
     @Test
-    void hasKey_PlayerDontHaveKey_ReturnTrue(){
-        Player player = new Player(map.getCell(0,1));
+    void hasKey_PlayerDontHaveKey_ReturnTrue() {
+        Player player = new Player(map.getCell(0, 1));
 
         assertFalse(player.hasKey());
     }
 
-//    @Test
-//    removeKey_removeKeyFromInventory(){
-//
-//    }
+    @Test
+    void removeKey_removeKeyFromInventory(){
+        Player player = new Player(map.getCell(0, 1));
+        Item key = new Key();
+        player.addItemToInventory(key);
+
+        player.removeKey();
+
+        assertFalse(player.hasKey());
+    }
 
 
 
