@@ -7,6 +7,7 @@ import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.items.*;
+import com.codecool.dungeoncrawl.logic.utilities.ImportExport;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -15,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
@@ -22,6 +24,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.List;
 
 import java.util.ArrayList;
@@ -39,6 +42,7 @@ public class Main extends Application {
     GraphicsContext context = canvas.getGraphicsContext2D();
     GraphicsContext inventoryContext = inventoryCanvas.getGraphicsContext2D();
     private final GameDatabaseManager manager = new GameDatabaseManager();
+    ImportExport ie = new ImportExport();
 
     public static void main(String[] args) {
         launch(args);
@@ -54,7 +58,7 @@ public class Main extends Application {
         Button button = new Button("Pick up");
         Button buttonLoad = new Button("Load");
         Button buttonExportGame = new Button("ExportGame");
-        Button buttonImport = new Button("Import");
+        Button buttonImportGame = new Button("Import");
         buttonLoad.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
 //                map.getPlayer().pickUpItem();
@@ -67,10 +71,36 @@ public class Main extends Application {
                 refresh();
             }
         });
+        buttonExportGame.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+
+                try {
+                    String name = getExportNameDialog();
+                    ie.exportToFile(map, name);
+
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+
+            }
+        });
+        buttonImportGame.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                String name = getExportNameDialog();
+                try {
+                    ie.importFromFile(name);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+
+
         ui.add(button, 0, 1);
         ui.add(buttonLoad, 0, 2);
         ui.add(buttonExportGame, 0, 3);
-        ui.add(buttonImport, 0, 4);
+        ui.add(buttonImportGame, 0, 4);
 
         BorderPane borderPane = new BorderPane();
         FlowPane canvases = new FlowPane() ;
@@ -87,7 +117,7 @@ public class Main extends Application {
         button.setFocusTraversable(false);
         buttonLoad.setFocusTraversable(false);
         buttonExportGame.setFocusTraversable(false);
-        buttonImport.setFocusTraversable(false);
+        buttonImportGame.setFocusTraversable(false);
 
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
@@ -291,5 +321,19 @@ public class Main extends Application {
         dialog.setTitle("title");
         dialog.setHeaderText("Name:");
         return dialog.showAndWait();
+    }
+
+    private String getExportNameDialog (){
+        TextInputDialog dialog = new TextInputDialog("Export");
+        ButtonType saveButton = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        String result = "";
+        dialog.getDialogPane().getButtonTypes().setAll(cancelButton, saveButton);
+        dialog.setTitle("Export");
+        Optional<String> dialogResult = dialog.showAndWait();
+        if(dialogResult.isPresent()){
+            result = dialogResult.get();
+        }
+        return result;
     }
 }
