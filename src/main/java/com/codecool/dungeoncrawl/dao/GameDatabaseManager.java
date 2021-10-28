@@ -1,12 +1,15 @@
 package com.codecool.dungeoncrawl.dao;
 
 import com.codecool.dungeoncrawl.logic.GameMap;
+import com.codecool.dungeoncrawl.logic.actors.Actor;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.items.Item;
+import com.codecool.dungeoncrawl.logic.utilities.PropertyBasedInterfaceMarshal;
 import com.codecool.dungeoncrawl.model.GameState;
 import com.codecool.dungeoncrawl.model.GameState;
 import com.codecool.dungeoncrawl.model.PlayerModel;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.postgresql.ds.PGSimpleDataSource;
 
 import javax.sql.DataSource;
@@ -18,6 +21,7 @@ public class GameDatabaseManager {
     private PlayerDao playerDao;
     private GameStateDao gameStateDao;
     private InventoryDao inventoryDao;
+    private Gson gson;
 
     public void setup() throws SQLException {
         DataSource dataSource = connect();
@@ -43,7 +47,10 @@ public class GameDatabaseManager {
     }
 
     public void saveGameState(GameMap map, PlayerModel playerModel) {
-        String currentMap = new Gson().toJson(map);
+        gson = new GsonBuilder()
+                .registerTypeAdapter(Actor.class, new PropertyBasedInterfaceMarshal())
+                .registerTypeAdapter(Item.class, new PropertyBasedInterfaceMarshal()).create();
+        String currentMap = gson.toJson(map);
         java.util.Date utilDate = new java.util.Date();
         Date savedAt = new java.sql.Date(utilDate.getTime());
         GameState gameState = new GameState(currentMap, savedAt, playerModel);
