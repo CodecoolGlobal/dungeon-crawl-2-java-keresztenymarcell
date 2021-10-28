@@ -280,4 +280,10 @@ public class Main extends Application {
         dialog.setHeaderText("Name:");
         return dialog.showAndWait();
     }
+
+    private String selectSave(List<String> saves){
+        Optional<String> latestSave = Optional.ofNullable(saves.get(0));
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(latestSave.orElse(""), saves);
+        return dialog.showAndWait().orElse("").split(", ")[0];
+    }
 }
