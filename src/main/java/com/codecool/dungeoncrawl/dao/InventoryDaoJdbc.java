@@ -22,6 +22,9 @@ public class InventoryDaoJdbc implements InventoryDao {
 
     @Override
     public void add(PlayerModel player) {
+
+
+
         String inventory = new Gson().toJson(player.getInventory());
 
         try(Connection conn = dataSource.getConnection()) {

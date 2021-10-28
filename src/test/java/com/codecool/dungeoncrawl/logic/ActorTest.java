@@ -54,23 +54,49 @@ class ActorTest {
     }
 
     @Test
-    void checkIfCanMove_NextCellInputNeedToReturnFalse_False(){
-        Cell closedDoor = gameMap.getCell(0,0);
-        Cell wall = gameMap.getCell(1,0);
-        Cell tree = gameMap.getCell(1,1);
+    void checkIfCanMove_NextCellInputIsEmptyCell_returnFalse(){
         Cell empty = gameMap.getCell(2,1);
-        closedDoor.setType(CellType.CLOSED_DOOR);
-        wall.setType(CellType.WALL);
-        tree.setType(CellType.TREE);
         empty.setType(CellType.EMPTY);
-
         Actor player = new Player(gameMap.getCell(2,2));
 
-        assertFalse(player.checkIfCanMove(closedDoor));
-        assertFalse(player.checkIfCanMove(wall));
-        assertFalse(player.checkIfCanMove(tree));
         assertFalse(player.checkIfCanMove(empty));
+    }
 
+    @Test
+    void checkIfCanMove_NextCellInputIsClosedDoor_returnFalse(){
+        Cell closedDoor = gameMap.getCell(0,0);
+        closedDoor.setType(CellType.CLOSED_DOOR);
+        Actor player = new Player(gameMap.getCell(2,2));
+
+
+        assertFalse(player.checkIfCanMove(closedDoor));
+    }
+
+    @Test
+    void checkIfCanMove_nextCellInputIsWall_returnFalse(){
+        Cell wall = gameMap.getCell(1,0);
+        wall.setType(CellType.WALL);
+        Actor player = new Player(gameMap.getCell(2,2));
+
+        assertFalse(player.checkIfCanMove(wall));
+    }
+
+    @Test
+    void checkIfCanMove_nextCellInputIsTree_returnFalse(){
+        Cell tree = gameMap.getCell(1,1);
+        tree.setType(CellType.TREE);
+        Actor player = new Player(gameMap.getCell(2,2));
+
+        assertFalse(player.checkIfCanMove(tree));
+    }
+
+    @Test
+    void checkIfCanMove_nextCellInputIsFloor_returnTrue(){
+        Cell floor = gameMap.getCell(1,1);
+        floor.setType(CellType.FLOOR);
+        Actor player = new Player(gameMap.getCell(2,2));
+
+        assertTrue(player.checkIfCanMove(floor));
 
 
     }
