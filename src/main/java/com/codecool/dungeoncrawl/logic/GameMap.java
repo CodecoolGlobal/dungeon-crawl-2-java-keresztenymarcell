@@ -95,4 +95,13 @@ public class GameMap {
     public void setName(String name) {
         this.name = name;
     }
+
+
+    public void export(){
+
+
+
+
+
+    }
 }
