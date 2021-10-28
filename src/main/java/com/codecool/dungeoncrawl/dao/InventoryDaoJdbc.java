@@ -1,9 +1,10 @@
 package com.codecool.dungeoncrawl.dao;
 
-import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.items.Item;
+import com.codecool.dungeoncrawl.logic.utilities.PropertyBasedInterfaceMarshal;
 import com.codecool.dungeoncrawl.model.PlayerModel;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import javax.sql.DataSource;
@@ -15,6 +16,7 @@ import java.util.List;
 public class InventoryDaoJdbc implements InventoryDao {
 
     private DataSource dataSource;
+    private Gson gson = new GsonBuilder().registerTypeAdapter(Item.class, new PropertyBasedInterfaceMarshal()).create();
 
     public InventoryDaoJdbc(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -22,7 +24,7 @@ public class InventoryDaoJdbc implements InventoryDao {
 
     @Override
     public void add(PlayerModel player) {
-        String inventory = new Gson().toJson(player.getInventory());
+        String inventory = gson.toJson(player.getInventory());
 
         try(Connection conn = dataSource.getConnection()) {
             String sql = "INSERT INTO inventory (player_id, inventory) VALUES (?, ?)";
