@@ -1,8 +1,6 @@
 package com.codecool.dungeoncrawl;
 
 import com.codecool.dungeoncrawl.dao.GameDatabaseManager;
-import com.codecool.dungeoncrawl.dao.PlayerDao;
-import com.codecool.dungeoncrawl.dao.PlayerDaoJdbc;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.GameMap;
@@ -17,7 +15,6 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
@@ -55,6 +52,15 @@ public class Main extends Application {
         ui.setPadding(new Insets(10));
 
         Button button = new Button("Pick up");
+        Button buttonLoad = new Button("Load");
+        Button buttonExportGame = new Button("ExportGame");
+        Button buttonImport = new Button("Import");
+        buttonLoad.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+//                map.getPlayer().pickUpItem();
+//                refresh();
+            }
+        });
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 map.getPlayer().pickUpItem();
@@ -62,6 +68,9 @@ public class Main extends Application {
             }
         });
         ui.add(button, 0, 1);
+        ui.add(buttonLoad, 0, 2);
+        ui.add(buttonExportGame, 0, 3);
+        ui.add(buttonImport, 0, 4);
 
         BorderPane borderPane = new BorderPane();
         FlowPane canvases = new FlowPane() ;
@@ -75,7 +84,10 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         refresh();
         scene.setOnKeyPressed(this::onKeyPressed);
-        button.setOnKeyPressed(this::onKeyPressed);
+        button.setFocusTraversable(false);
+        buttonLoad.setFocusTraversable(false);
+        buttonExportGame.setFocusTraversable(false);
+        buttonImport.setFocusTraversable(false);
 
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
@@ -263,7 +275,7 @@ public class Main extends Application {
                 else{
                     map.getPlayer().setName(name);
                     manager.savePlayer(map.getPlayer(), map);
-                    manager.loadMap(name);
+//                    map = manager.loadMap(name);
                 }
                 break;
             }

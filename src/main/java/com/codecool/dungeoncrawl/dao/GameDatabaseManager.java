@@ -4,6 +4,7 @@ import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.actors.Actor;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.items.Item;
+import com.codecool.dungeoncrawl.logic.items.Weapon;
 import com.codecool.dungeoncrawl.logic.utilities.PropertyBasedInterfaceMarshal;
 import com.codecool.dungeoncrawl.model.GameState;
 import com.codecool.dungeoncrawl.model.GameState;
@@ -22,8 +23,9 @@ public class GameDatabaseManager {
     private GameStateDao gameStateDao;
     private InventoryDao inventoryDao;
     private Gson gson = new GsonBuilder()
-                .registerTypeAdapter(Actor.class, new PropertyBasedInterfaceMarshal())
-            .registerTypeAdapter(Item.class, new PropertyBasedInterfaceMarshal()).create();
+            .registerTypeAdapter(Actor.class, new PropertyBasedInterfaceMarshal())
+            .registerTypeAdapter(Item.class, new PropertyBasedInterfaceMarshal())
+            .registerTypeAdapter(Weapon.class, new PropertyBasedInterfaceMarshal()).create();
 
     public void setup() throws SQLException {
         DataSource dataSource = connect();
