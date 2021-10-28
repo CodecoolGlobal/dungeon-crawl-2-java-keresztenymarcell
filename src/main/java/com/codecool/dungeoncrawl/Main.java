@@ -252,6 +252,7 @@ public class Main extends Application {
                 else{
                     map.getPlayer().setName(name);
                     manager.savePlayer(map.getPlayer(), map);
+                    manager.loadMap(name);
                 }
                 break;
             }

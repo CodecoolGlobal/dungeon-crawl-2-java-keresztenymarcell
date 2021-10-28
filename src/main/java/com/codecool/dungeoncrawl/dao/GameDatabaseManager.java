@@ -21,7 +21,9 @@ public class GameDatabaseManager {
     private PlayerDao playerDao;
     private GameStateDao gameStateDao;
     private InventoryDao inventoryDao;
-    private Gson gson;
+    private Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Actor.class, new PropertyBasedInterfaceMarshal())
+            .registerTypeAdapter(Item.class, new PropertyBasedInterfaceMarshal()).create();
 
     public void setup() throws SQLException {
         DataSource dataSource = connect();
@@ -47,9 +49,7 @@ public class GameDatabaseManager {
     }
 
     public void saveGameState(GameMap map, PlayerModel playerModel) {
-        gson = new GsonBuilder()
-                .registerTypeAdapter(Actor.class, new PropertyBasedInterfaceMarshal())
-                .registerTypeAdapter(Item.class, new PropertyBasedInterfaceMarshal()).create();
+
         String currentMap = gson.toJson(map);
         java.util.Date utilDate = new java.util.Date();
         Date savedAt = new java.sql.Date(utilDate.getTime());
@@ -71,8 +71,17 @@ public class GameDatabaseManager {
         throw new IllegalArgumentException();
     }
 
-    public GameMap loadMap() {
-        throw new IllegalArgumentException();
+    public GameMap loadMap(String name) {
+        int playerId = playerDao.getIdByName(name);
+        GameState gameState = gameStateDao.get(playerId);
+        PlayerModel playerModel = gameState.getPlayer();
+        String gameMapJson = gameState.getCurrentMap();
+
+
+        GameMap gameMap = gson.fromJson(gameMapJson, GameMap.class);
+        System.out.println(gameMap.toString());
+        return gameMap;
+
     }
 
     public boolean checkName(String name){
