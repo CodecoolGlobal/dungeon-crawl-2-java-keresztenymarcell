@@ -85,10 +85,11 @@ public class PlayerTest {
     @Test
     void pickUpItem_ItemIsApple_HealthPointAdded(){
         Item apple = new Apple(map.getCell(0,1));
+        int expected = 130;
         player.getCell().setItem(apple);
         player.pickUpItem();
 
-        assertEquals(130, player.getHealth());
+        assertEquals(expected, player.getHealth());
 
     }
 
@@ -137,6 +138,7 @@ public class PlayerTest {
         player.attack(nextCell);
         player.attack(nextCell);
         assertNull(nextCell.getActor());
+
     }
 
 
