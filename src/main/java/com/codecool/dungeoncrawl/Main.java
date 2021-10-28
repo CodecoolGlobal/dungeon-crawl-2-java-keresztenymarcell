@@ -25,13 +25,18 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.util.HashMap;
 import java.util.List;
 
 import java.util.ArrayList;
 import java.util.Optional;
 
 public class Main extends Application {
-    GameMap map = MapLoader.loadMap("/map.txt");
+    String mapName1 = "/map.txt";
+    String mapName2 = "/map2.txt";
+    String mapName3 = "/map3.txt";
+    GameMap map = MapLoader.loadMap(mapName1);
+    HashMap<String, GameMap> discoveredMaps = new HashMap<>();
     GameMap inventoryMap = MapLoader.loadMap("/inventory.txt");
     int canvasWidth = 16 * Tiles.TILE_WIDTH;
     int canvasHeight = 16 * Tiles.TILE_WIDTH;
@@ -173,9 +178,9 @@ public class Main extends Application {
 
     private void refresh() {
         if (map.getPlayer().getCell().getType() == CellType.LATTER){
-            switchMap("/map2.txt");
+            switchMap(mapName2, mapName1);
         }else if (map.getPlayer().getCell().getType() == CellType.HOUSE){
-            switchMap("/map3.txt");
+            switchMap(mapName3, mapName2);
         }
 
         int[] contextStartPos = getCanvasStartPos(map.getPlayer());
@@ -186,7 +191,7 @@ public class Main extends Application {
 
 
         if (map.getPlayer().getCell().getType() == CellType.LATTER){
-            map = MapLoader.loadMap("/map2.txt");
+            map = MapLoader.loadMap(mapName2);
         }
 
     }
@@ -212,14 +217,15 @@ public class Main extends Application {
     }
 
 
-    private void switchMap(String mapName){
+    private void switchMap(String newMapName, String currentMapName){
 
         Player player = map.getPlayer();
         List<Item> inventory = player.getInventory();
         int playerHealth = player.getHealth();
         int playerAttack = player.getAttack();
         Weapon weapon = player.getWeapon();
-        map = MapLoader.loadMap(mapName);
+        discoveredMaps.put(currentMapName, map);
+        map = MapLoader.loadMap(newMapName);
 
         player = map.getPlayer();
         player.setInventory(inventory);

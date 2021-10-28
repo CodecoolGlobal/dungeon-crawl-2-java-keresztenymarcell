@@ -46,7 +46,7 @@ public class GameDatabaseManager {
         updateGameState(map, model);
     }
 
-    public void saveGameState(GameMap map, PlayerModel playerModel) {
+    private void saveGameState(GameMap map, PlayerModel playerModel) {
         gson = new GsonBuilder()
                 .registerTypeAdapter(Actor.class, new PropertyBasedInterfaceMarshal())
                 .registerTypeAdapter(Item.class, new PropertyBasedInterfaceMarshal()).create();
@@ -57,8 +57,8 @@ public class GameDatabaseManager {
         gameStateDao.add(gameState);
     }
 
-    public void updateGameState(GameMap map, PlayerModel playerModel) {
-        String currentMap = new Gson().toJson(map);
+    private void updateGameState(GameMap map, PlayerModel playerModel) {
+        String currentMap = gson.toJson(map);
         java.util.Date utilDate = new java.util.Date();
         Date savedAt = new java.sql.Date(utilDate.getTime());
         GameState gameState = new GameState(currentMap, savedAt, playerModel);
@@ -67,13 +67,17 @@ public class GameDatabaseManager {
         gameStateDao.update(gameState);
     }
 
+    private void addDiscoveredMaps(List<GameMap> discoveredMaps) {
+
+    }
+
     public Player loadPlayer() {
         throw new IllegalArgumentException();
     }
 
-    public GameMap loadMap() {
-        throw new IllegalArgumentException();
-    }
+//    public GameMap loadMap() {
+//        String jsonString = "";
+//    }
 
     public boolean checkName(String name){
         int id = playerDao.getIdByName(name);
