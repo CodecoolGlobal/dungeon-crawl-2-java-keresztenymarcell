@@ -100,13 +100,11 @@ public class GameDatabaseManager {
                 cell.setGameMap(gameMap);
                 if (cell.getActor() != null) {
                     cell.getActor().setCell(cell);
-                    System.out.println(cell.getActor());
                 }
             }
         }
         Cell playerCell = new Cell(gameMap, playerModel.getX(), playerModel.getY(), CellType.FLOOR);
         gameMap.getPlayer().setCell(playerCell);
-        System.out.println(gameMap.toString());
         return gameMap;
 
     }
