@@ -61,8 +61,9 @@ public class Main extends Application {
         Button buttonImportGame = new Button("Import");
         buttonLoad.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-//                map.getPlayer().pickUpItem();
-//                refresh();
+                List<String> saves = manager.getAllSavedMapsInfo();
+                selectSave(saves);
+                refresh();
             }
         });
         button.setOnAction(new EventHandler<ActionEvent>() {
@@ -305,7 +306,6 @@ public class Main extends Application {
                 else{
                     map.getPlayer().setName(name);
                     manager.savePlayer(map.getPlayer(), map);
-//                    map = manager.loadMap(name);
                 }
                 break;
             }
@@ -335,5 +335,12 @@ public class Main extends Application {
             result = dialogResult.get();
         }
         return result;
+    }
+
+    private void selectSave(List<String> saves){
+        Optional<String> latestSave = Optional.ofNullable(saves.get(0));
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(latestSave.orElse(""), saves);
+        String loadName = dialog.showAndWait().orElse("").split(", ")[0];
+        map = manager.loadMap(loadName);
     }
 }

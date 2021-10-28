@@ -1,5 +1,7 @@
 package com.codecool.dungeoncrawl.dao;
 
+import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.actors.Actor;
 import com.codecool.dungeoncrawl.logic.actors.Player;
@@ -16,6 +18,7 @@ import org.postgresql.ds.PGSimpleDataSource;
 import javax.sql.DataSource;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameDatabaseManager {
@@ -73,15 +76,35 @@ public class GameDatabaseManager {
         throw new IllegalArgumentException();
     }
 
+    public List<String> getAllSavedMapsInfo() {
+        List<String> savedMapsInfo = new ArrayList<>();
+        List<GameState> gameStates = gameStateDao.getAll();
+        for (GameState gameState: gameStates) {
+            StringBuilder sb = new StringBuilder(gameState.getPlayer().getPlayerName())
+                    .append(", ")
+                    .append(gameState.getSavedAt());
+            savedMapsInfo.add(sb.toString());
+        }
+        return savedMapsInfo;
+    }
+
     public GameMap loadMap(String name) {
         int playerId = playerDao.getIdByName(name);
         GameState gameState = gameStateDao.get(playerId);
-        PlayerModel playerModel = gameState.getPlayer();
+        PlayerModel playerModel = playerDao.get(playerId);
         String gameMapJson = gameState.getCurrentMap();
 
-
         GameMap gameMap = gson.fromJson(gameMapJson, GameMap.class);
-        System.out.println(gameMap.toString());
+        for (Cell[] row: gameMap.getCells()) {
+            for (Cell cell: row) {
+                cell.setGameMap(gameMap);
+                if (cell.getActor() != null) {
+                    cell.getActor().setCell(cell);
+                }
+            }
+        }
+        Cell playerCell = new Cell(gameMap, playerModel.getX(), playerModel.getY(), CellType.FLOOR);
+        gameMap.getPlayer().setCell(playerCell);
         return gameMap;
 
     }
