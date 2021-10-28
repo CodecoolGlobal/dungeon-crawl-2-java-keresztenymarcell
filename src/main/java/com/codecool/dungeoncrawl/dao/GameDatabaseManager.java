@@ -16,6 +16,7 @@ import org.postgresql.ds.PGSimpleDataSource;
 import javax.sql.DataSource;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameDatabaseManager {
@@ -71,6 +72,18 @@ public class GameDatabaseManager {
 
     public Player loadPlayer() {
         throw new IllegalArgumentException();
+    }
+
+    public List<String> getAllSavedMapsInfo() {
+        List<String> savedMapsInfo = new ArrayList<>();
+        List<GameState> gameStates = gameStateDao.getAll();
+        for (GameState gameState: gameStates) {
+            StringBuilder sb = new StringBuilder(gameState.getPlayer().getPlayerName())
+                    .append(", ")
+                    .append(gameState.getSavedAt());
+            savedMapsInfo.add(sb.toString());
+        }
+        return savedMapsInfo;
     }
 
     public GameMap loadMap(String name) {
