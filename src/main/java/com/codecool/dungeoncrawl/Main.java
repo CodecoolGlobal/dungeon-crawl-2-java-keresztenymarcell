@@ -172,10 +172,21 @@ public class Main extends Application {
     }
 
     private void refresh() {
+        Optional<String> currentMap = Optional.ofNullable(map.getName());
         if (map.getPlayer().getCell().getType() == CellType.LATTER){
-            switchMap("/map2.txt");
+            if(currentMap.orElse("/map.txt").equals("/map.txt")){
+                switchMap("/map2.txt");
+            }
+            else{
+                switchMap("/map.txt");
+            }
         }else if (map.getPlayer().getCell().getType() == CellType.HOUSE){
-            switchMap("/map3.txt");
+            if(currentMap.orElse("/map2.txt").equals("/map2.txt")){
+                switchMap("/map3.txt");
+            }
+            else{
+                switchMap("/map2.txt");
+            }
         }
 
         int[] contextStartPos = getCanvasStartPos(map.getPlayer());
