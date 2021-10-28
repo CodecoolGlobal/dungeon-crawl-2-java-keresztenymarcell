@@ -123,11 +123,12 @@ public class PlayerTest {
         Weapon sword = new Sword(map.getCell(0, 2));
         player.setWeapon(sword);
         nextCell.setActor(enemy);
+        int expected = 2;
 
 
         player.attack(nextCell);
 
-        assertEquals(2, enemy.getHealth());
+        assertEquals(expected, enemy.getHealth());
     }
 
     @Test
