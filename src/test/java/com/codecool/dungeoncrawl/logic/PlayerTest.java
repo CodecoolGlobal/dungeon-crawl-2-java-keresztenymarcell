@@ -97,10 +97,11 @@ public class PlayerTest {
     void pickUpItem_ItemIsNotNullSoItIsAnItem_ItemAddedToInventory(){
         Item sword = new Sword(map.getCell(0, 1));
         player.getCell().setItem(sword);
-
         player.pickUpItem();
+        Item input = player.getInventory().stream().filter(item -> item instanceof Sword).findFirst().orElse(null);
 
-        assertEquals(sword, player.getInventory().get(0));
+
+        assertEquals(sword, input);
         assertNull(map.getCell(0,0).getItem());
     }
 
