@@ -12,6 +12,7 @@ public class GameMap {
     private int width;
     private int height;
     private Cell[][] cells;
+    private String name;
 
     private Player player;
 
@@ -85,5 +86,13 @@ public class GameMap {
 
     public Cell[][] getCells() {
         return cells;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
