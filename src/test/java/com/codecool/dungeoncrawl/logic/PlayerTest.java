@@ -101,7 +101,7 @@ public class PlayerTest {
         player.pickUpItem();
 
         assertEquals(sword, player.getInventory().get(0));
-        assertNull(player.getCell().getItem());
+        assertNull(map.getCell(0,0).getItem());
     }
 
     @Test
