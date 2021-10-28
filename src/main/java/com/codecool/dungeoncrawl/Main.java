@@ -74,24 +74,27 @@ public class Main extends Application {
         });
         buttonExportGame.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
+                String name = getExportNameDialog();
+                if (name != null) {
+                    try {
+                        ie.exportToFile(map, name);
 
-                try {
-                    String name = getExportNameDialog();
-                    ie.exportToFile(map, name);
-
-                } catch (IOException ex) {
-                    ex.printStackTrace();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
                 }
-
             }
         });
         buttonImportGame.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                String name = getExportNameDialog();
-                try {
-                    ie.importFromFile(name);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
+                String name = getImportNameDialog();
+                if (name != null) {
+                    try {
+                        map = ie.importFromFile(name);
+                        refresh();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
                 }
             }
         });
@@ -324,7 +327,7 @@ public class Main extends Application {
     }
 
     private String getExportNameDialog (){
-        TextInputDialog dialog = new TextInputDialog("Export");
+        TextInputDialog dialog = new TextInputDialog("File name");
         ButtonType saveButton = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
         ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
         String result = "";
@@ -333,6 +336,26 @@ public class Main extends Application {
         Optional<String> dialogResult = dialog.showAndWait();
         if(dialogResult.isPresent()){
             result = dialogResult.get();
+        }
+        if(result.equals("")){
+            return null;
+        }
+        return result;
+    }
+
+    private String getImportNameDialog (){
+        TextInputDialog dialog = new TextInputDialog("File name");
+        ButtonType saveButton = new ButtonType("Import", ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        String result = "";
+        dialog.getDialogPane().getButtonTypes().setAll(cancelButton, saveButton);
+        dialog.setTitle("Import");
+        Optional<String> dialogResult = dialog.showAndWait();
+        if(dialogResult.isPresent()){
+            result = dialogResult.get();
+        }
+        if(result.equals("")){
+            return null;
         }
         return result;
     }

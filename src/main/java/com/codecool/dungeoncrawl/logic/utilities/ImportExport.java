@@ -1,5 +1,8 @@
 package com.codecool.dungeoncrawl.logic.utilities;
 
+import com.codecool.dungeoncrawl.dao.GameDatabaseManager;
+import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.actors.Actor;
 import com.codecool.dungeoncrawl.logic.items.Item;
@@ -16,6 +19,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class ImportExport {
+
+    private final GameDatabaseManager manager = new GameDatabaseManager();
 
     private static Gson gson = new GsonBuilder()
             .registerTypeAdapter(Actor.class, new PropertyBasedInterfaceMarshal())
@@ -35,19 +40,14 @@ public class ImportExport {
 
 
 
-    public void importFromFile(String name) throws IOException {
+    public GameMap importFromFile(String name) throws IOException {
         Path currentRelativePath = Paths.get("");
         String s = currentRelativePath.toAbsolutePath().toString();
         String path = s + "/export/" + name + ".json";
 
-        Reader reader = Files.newBufferedReader(Paths.get(name));
+        Reader reader = Files.newBufferedReader(Paths.get(path));
         GameMap gameMap = gson.fromJson(reader, GameMap.class);
-        System.out.println(gameMap);
-
-
-
-
-
+        return manager.fillCellInfoFromGameMap(gameMap);
     }
 
 }
