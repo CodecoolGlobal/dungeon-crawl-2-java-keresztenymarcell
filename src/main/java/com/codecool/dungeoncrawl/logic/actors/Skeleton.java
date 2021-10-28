@@ -25,4 +25,12 @@ public class Skeleton extends Monster {
         return "skeleton";
     }
 
+    @Override
+    public String toString() {
+        return "Skeleton{" +
+                "cell=" + cell +
+                ", health=" + health +
+                ", attack=" + attack +
+                '}';
+    }
 }

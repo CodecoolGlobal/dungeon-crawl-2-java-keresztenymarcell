@@ -31,7 +31,7 @@ public class GameMap {
         for(Cell[] row: cells){
             for(Cell col: row){
                 Monster monster;
-                if(col.getActor() != player){
+                if(col.getActor() instanceof Monster){
                     monster = (Monster)(col.getActor());
                 }
                 else monster = null;

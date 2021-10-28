@@ -10,7 +10,7 @@ public class Cell implements Drawable {
     private transient GameMap gameMap;
     private int x, y;
 
-    Cell(GameMap gameMap, int x, int y, CellType type) {
+    public Cell(GameMap gameMap, int x, int y, CellType type) {
         this.gameMap = gameMap;
         this.x = x;
         this.y = y;
@@ -60,5 +60,19 @@ public class Cell implements Drawable {
 
     public GameMap getGameMap() {
         return gameMap;
+    }
+
+    public void setGameMap(GameMap gameMap) {
+        this.gameMap = gameMap;
+    }
+
+    @Override
+    public String toString() {
+        return "Cell{" +
+                "type=" + type +
+                ", item=" + item +
+                ", x=" + x +
+                ", y=" + y +
+                '}';
     }
 }

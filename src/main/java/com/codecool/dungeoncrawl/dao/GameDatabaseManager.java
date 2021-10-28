@@ -1,5 +1,7 @@
 package com.codecool.dungeoncrawl.dao;
 
+import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.actors.Actor;
 import com.codecool.dungeoncrawl.logic.actors.Player;
@@ -89,11 +91,21 @@ public class GameDatabaseManager {
     public GameMap loadMap(String name) {
         int playerId = playerDao.getIdByName(name);
         GameState gameState = gameStateDao.get(playerId);
-        PlayerModel playerModel = gameState.getPlayer();
+        PlayerModel playerModel = playerDao.get(playerId);
         String gameMapJson = gameState.getCurrentMap();
 
-
         GameMap gameMap = gson.fromJson(gameMapJson, GameMap.class);
+        for (Cell[] row: gameMap.getCells()) {
+            for (Cell cell: row) {
+                cell.setGameMap(gameMap);
+                if (cell.getActor() != null) {
+                    cell.getActor().setCell(cell);
+                    System.out.println(cell.getActor());
+                }
+            }
+        }
+        Cell playerCell = new Cell(gameMap, playerModel.getX(), playerModel.getY(), CellType.FLOOR);
+        gameMap.getPlayer().setCell(playerCell);
         System.out.println(gameMap.toString());
         return gameMap;
 
