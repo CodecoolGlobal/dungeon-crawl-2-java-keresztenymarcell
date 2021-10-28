@@ -1,4 +1,8 @@
 DROP TABLE IF EXISTS public.game_state;
+DROP TABLE IF EXISTS public.inventory;
+DROP TABLE IF EXISTS public.player;
+
+
 CREATE TABLE public.game_state (
     id serial NOT NULL PRIMARY KEY,
     current_map text NOT NULL,
@@ -7,7 +11,13 @@ CREATE TABLE public.game_state (
     player_id integer NOT NULL
 );
 
-DROP TABLE IF EXISTS public.player;
+
+CREATE TABLE public.inventory(
+                                 player_id integer NOT NULL,
+                                 inventory text
+);
+
+
 CREATE TABLE public.player (
     id serial NOT NULL PRIMARY KEY,
     player_name text NOT NULL,
@@ -16,11 +26,6 @@ CREATE TABLE public.player (
     y integer NOT NULL
 );
 
-DROP TABLE IF EXISTS public.inventory;
-CREATE TABLE public.inventory(
-    player_id integer NOT NULL,
-    inventory text
-);
 
 ALTER TABLE ONLY public.game_state
     ADD CONSTRAINT fk_player_id FOREIGN KEY (player_id) REFERENCES public.player(id);

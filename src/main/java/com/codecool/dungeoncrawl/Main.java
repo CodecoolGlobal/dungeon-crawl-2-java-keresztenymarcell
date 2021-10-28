@@ -238,7 +238,6 @@ public class Main extends Application {
             if(opt.isPresent()){
                 name = opt.get();
                 if(manager.checkName(name)){
-                    System.out.println("in");
                     Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
                     confirm.setTitle("Confirm");
                     confirm.setHeaderText("Would you like to overwrite the already existing state?");
@@ -248,11 +247,11 @@ public class Main extends Application {
                         continue;
                     }
                     map.getPlayer().setName(name);
-                    manager.updatePlayer(map.getPlayer());
+                    manager.updatePlayer(map.getPlayer(), map);
                 }
                 else{
                     map.getPlayer().setName(name);
-                    manager.savePlayer(map.getPlayer());
+                    manager.savePlayer(map.getPlayer(), map);
                 }
                 break;
             }

@@ -1,17 +1,27 @@
 package com.codecool.dungeoncrawl.dao;
 
+import com.codecool.dungeoncrawl.logic.GameMap;
+import com.codecool.dungeoncrawl.logic.actors.Actor;
 import com.codecool.dungeoncrawl.logic.actors.Player;
+import com.codecool.dungeoncrawl.logic.items.Item;
+import com.codecool.dungeoncrawl.logic.utilities.PropertyBasedInterfaceMarshal;
+import com.codecool.dungeoncrawl.model.GameState;
 import com.codecool.dungeoncrawl.model.GameState;
 import com.codecool.dungeoncrawl.model.PlayerModel;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.postgresql.ds.PGSimpleDataSource;
 
 import javax.sql.DataSource;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.util.List;
 
 public class GameDatabaseManager {
     private PlayerDao playerDao;
     private GameStateDao gameStateDao;
     private InventoryDao inventoryDao;
+    private Gson gson;
 
     public void setup() throws SQLException {
         DataSource dataSource = connect();
@@ -20,14 +30,49 @@ public class GameDatabaseManager {
         inventoryDao = new InventoryDaoJdbc(dataSource);
     }
 
-    public void savePlayer(Player player) {
-        PlayerModel playerModel = new PlayerModel(player);
-        playerDao.add(playerModel);
+    public void savePlayer(Player player, GameMap map) {
+        PlayerModel model = new PlayerModel(player);
+        playerDao.add(model);
+        inventoryDao.add(model);
+        saveGameState(map, model);
     }
 
-    public void updatePlayer(Player player){
-        PlayerModel playerModel = new PlayerModel(player);
-        playerDao.update(playerModel);
+    public void updatePlayer(Player player, GameMap map) {
+        PlayerModel model = new PlayerModel(player);
+        int playerId = playerDao.getIdByName(player.getName());
+        model.setId(playerId);
+        playerDao.update(model);
+        inventoryDao.update(model);
+        updateGameState(map, model);
+    }
+
+    public void saveGameState(GameMap map, PlayerModel playerModel) {
+        gson = new GsonBuilder()
+                .registerTypeAdapter(Actor.class, new PropertyBasedInterfaceMarshal())
+                .registerTypeAdapter(Item.class, new PropertyBasedInterfaceMarshal()).create();
+        String currentMap = gson.toJson(map);
+        java.util.Date utilDate = new java.util.Date();
+        Date savedAt = new java.sql.Date(utilDate.getTime());
+        GameState gameState = new GameState(currentMap, savedAt, playerModel);
+        gameStateDao.add(gameState);
+    }
+
+    public void updateGameState(GameMap map, PlayerModel playerModel) {
+        String currentMap = new Gson().toJson(map);
+        java.util.Date utilDate = new java.util.Date();
+        Date savedAt = new java.sql.Date(utilDate.getTime());
+        GameState gameState = new GameState(currentMap, savedAt, playerModel);
+        int gameStateId = gameStateDao.getGameStateIdByPlayerName(map.getPlayer().getName());
+        gameState.setId(gameStateId);
+        gameStateDao.update(gameState);
+    }
+
+    public Player loadPlayer() {
+        throw new IllegalArgumentException();
+    }
+
+    public GameMap loadMap() {
+        throw new IllegalArgumentException();
     }
 
     public boolean checkName(String name){
