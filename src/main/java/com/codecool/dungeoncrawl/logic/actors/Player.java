@@ -5,6 +5,7 @@ import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.items.Key;
 import com.codecool.dungeoncrawl.logic.items.Weapon;
 import com.codecool.dungeoncrawl.logic.items.*;
+import com.codecool.dungeoncrawl.logic.utilities.Display;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import org.w3c.dom.ls.LSOutput;
@@ -30,7 +31,7 @@ public class Player extends Actor {
         Cell nextCell = getCell().getNeighbor(dx, dy);
         if(checkIfCanMove(nextCell)){
             if(hasWon(nextCell)){
-                showGameOverMessage("You have won!");
+                Display.showGameOverMessage("You have won!");
             }
             getCell().setActor(null);
             nextCell.setActor(this);
@@ -50,18 +51,6 @@ public class Player extends Actor {
 
     public boolean hasWon(Cell cell){
         return cell.getType() == CellType.PRIZE;
-    }
-
-    public void showGameOverMessage(String message){
-
-        Dialog<String > losingMessage = new Dialog<>();
-        losingMessage.setTitle("Message");
-        losingMessage.setContentText(message);
-        losingMessage.show();
-        losingMessage.getDialogPane().getButtonTypes().addAll(ButtonType.CLOSE);
-        losingMessage.setHeight(260);
-        losingMessage.setWidth(260);
-
     }
 
     public boolean hasKey(){

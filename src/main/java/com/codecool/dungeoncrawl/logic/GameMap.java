@@ -4,6 +4,7 @@ import com.codecool.dungeoncrawl.logic.actors.*;
 import com.codecool.dungeoncrawl.logic.actors.Monster;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
+import com.codecool.dungeoncrawl.logic.utilities.Display;
 import com.codecool.dungeoncrawl.logic.utilities.Randomizer;
 
 
@@ -43,7 +44,7 @@ public class GameMap {
                 }else if(monster instanceof Wizard){
                     int[] place;
                     if(!Monster.hasMoved.contains(monster)){
-                        if(Randomizer.random.nextInt(5) < 5){
+                        if(Randomizer.random.nextInt(6) < 5){
                             place = Randomizer.chooseDirection();
                             monster.move(place[0], place[1]);
                         }
@@ -57,7 +58,7 @@ public class GameMap {
             }
         }
         if(!getPlayer().isAlive()){
-            getPlayer().showGameOverMessage("Game Over");
+            Display.showGameOverMessage("Game Over");
         }
         Monster.hasMoved.clear();
     }
