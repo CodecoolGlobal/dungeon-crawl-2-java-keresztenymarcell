@@ -91,22 +91,26 @@ public class GameDatabaseManager {
     public GameMap loadMap(String name) {
         int playerId = playerDao.getIdByName(name);
         GameState gameState = gameStateDao.get(playerId);
-        PlayerModel playerModel = playerDao.get(playerId);
         String gameMapJson = gameState.getCurrentMap();
 
         GameMap gameMap = gson.fromJson(gameMapJson, GameMap.class);
+        return fillCellInfoFromGameMap(gameMap);
+
+    }
+
+    public GameMap fillCellInfoFromGameMap(GameMap gameMap) {
         for (Cell[] row: gameMap.getCells()) {
             for (Cell cell: row) {
                 cell.setGameMap(gameMap);
                 if (cell.getActor() != null) {
                     cell.getActor().setCell(cell);
+                    if (cell.getActor() instanceof Player) {
+                        gameMap.setPlayer((Player) cell.getActor());
+                    }
                 }
             }
         }
-        Cell playerCell = new Cell(gameMap, playerModel.getX(), playerModel.getY(), CellType.FLOOR);
-        gameMap.getPlayer().setCell(playerCell);
         return gameMap;
-
     }
 
     public boolean checkName(String name){
